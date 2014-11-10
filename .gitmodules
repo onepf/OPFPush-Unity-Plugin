@@ -1,0 +1,3 @@
+[submodule "OPFPush"]
+	path = OPFPush
+	url = https://github.com/onepf/OPFPush.git
