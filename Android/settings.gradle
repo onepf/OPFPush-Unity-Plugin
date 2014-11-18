@@ -1,1 +1,2 @@
+include ':opfpush', ':opfpush-gcm', ':opfpush-nokia', ':opfpush-adm'
 include ':app'

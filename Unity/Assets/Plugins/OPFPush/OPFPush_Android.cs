@@ -24,7 +24,9 @@ namespace OnePF.Push
         public void Init(Options options)
         {
             AndroidJavaClass j_currentActivityClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-            AndroidJavaObject j_currentActivity = j_currentActivityClass.GetStatic<AndroidJavaObject>("currentActivity"); 
+            AndroidJavaObject j_currentActivity = j_currentActivityClass.GetStatic<AndroidJavaObject>("currentActivity");
+
+            AndroidJavaClass j_optionsClass = new AndroidJavaClass("org.onepf.opfpush.Options");
 
             //_push.Call("init", p.ServerUrl, p.SenderId);
         }

@@ -3,6 +3,7 @@ package org.onepf.opfpush.unity;
 import android.content.SharedPreferences;
 
 import org.onepf.opfpush.Options;
+import org.onepf.opfpush.ExponentialBackoff;
 
 public class PushHelper extends android.app.Application 
 {
@@ -20,16 +21,29 @@ public class PushHelper extends android.app.Application
     void saveOptions(Options options) {
         SharedPreferences settings = getSharedPreferences(PREFS, 0);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean("silentMode", mSilentMode);
 
-        // Commit the edits!
+        editor.putBoolean("recoverProvider", options.isRecoverProvider());
+        editor.putBoolean("selectSystemPreferred", options.isSelectSystemPreferred());
+
         editor.commit();
     }
     
     Options loadOptions() {
-        return null;
+        SharedPreferences settings = getSharedPreferences(PREFS, 0);
+        boolean recoverProvider = settings.getBoolean("recoverProvider", true);
+        boolean selectSystemPreferred = settings.getBoolean("selectSystemPreferred", true);
+
+        Options.Builder builder = new Options.Builder();
+        //builder.addProviders(new GCMProvider(this, GCM_SENDER_ID));
+        builder.setRecoverProvider(recoverProvider)
+               .setSelectSystemPreferred(selectSystemPreferred)
+               .setBackoff(new ExponentialBackoff(Integer.MAX_VALUE));
+
+        return builder.build();
     }
     
     public void init(Options options) {
+        saveOptions(options);
+
     }
  }

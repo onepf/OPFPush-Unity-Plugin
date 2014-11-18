@@ -20,7 +20,6 @@ public class PushHelper extends android.app.Application
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean("silentMode", mSilentMode);
 
-        // Commit the edits!
         editor.commit();
     }
     
