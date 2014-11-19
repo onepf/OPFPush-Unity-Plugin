@@ -1,6 +1,3 @@
-[submodule "OPFPush"]
-	path = Android/OPFPush
-	url = https://github.com/onepf/OPFPush.git
 [submodule "Android/OPFPush"]
 	path = Android/OPFPush
 	url = https://github.com/onepf/OPFPush.git
