@@ -1,2 +1,6 @@
 include ':opfpush', ':opfpush-gcm', ':opfpush-nokia', ':opfpush-adm'
-include ':app'
+project(':opfpush').projectDir = new File(settingsDir, 'OPFPush/opfpush')
+project(':opfpush-gcm').projectDir = new File(settingsDir, 'OPFPush/opfpush-gcm')
+project(':opfpush-adm').projectDir = new File(settingsDir, 'OPFPush/opfpush-adm')
+project(':opfpush-nokia').projectDir = new File(settingsDir, 'OPFPush/opfpush-nokia')
+include ':plugin'

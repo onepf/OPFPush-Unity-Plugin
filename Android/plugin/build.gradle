@@ -1,8 +1,9 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
+apply from: '../OPFPush/maven_push.gradle'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "20.0.0"
+    buildToolsVersion = "21.1"
 
     defaultConfig {
         applicationId "org.onepf.opfpush.unity"
@@ -21,4 +22,8 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile project(':opfpush-adm')
+    compile project(':opfpush-gcm')
+    compile project(':opfpush-nokia')
 }

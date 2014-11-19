@@ -19,6 +19,6 @@ public class CustomApplication extends android.app.Application
         super.onCreate();
 		Log.d(TAG, "Application.onCreate");
 
-        OPFPushHelper.getInstance(this).init(options);
+        //OPFPushHelper.getInstance(this).init(options);
 	}
 }

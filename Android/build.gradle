@@ -1,19 +1,33 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply plugin: 'idea'
 
 buildscript {
     repositories {
         jcenter()
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.2'
 
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+    dependencies {
+        classpath 'org.robolectric:robolectric-gradle-plugin:0.13.2'
+        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
     }
+}
+
+def isReleaseBuild() {
+    return !VERSION_NAME.endsWith("SNAPSHOT")
+}
+
+def useTestRepo() {
+    return true
 }
 
 allprojects {
     repositories {
+        maven { url 'https://raw.githubusercontent.com/onepf/OPF-mvn-repo/master/' }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         jcenter()
+    }
+
+    ext {
+        compileSdkVersion = 21
+        buildToolsVersion = "21.1"
     }
 }
