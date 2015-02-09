@@ -99,5 +99,15 @@ namespace OnePF.Push
             init_args[1].l = config;
             AndroidJNI.CallStaticVoidMethod(unityHelper_class, unityHelper_init, init_args);
         }
+
+        void OnGUI()
+        {
+            if (GUI.Button(new Rect(10, 10, Screen.width / 4, Screen.height / 8), "Register"))
+            {
+                IntPtr unityHelper_class = AndroidJNI.FindClass("org/onepf/opfpush/unity/UnityHelper");
+                IntPtr unityHelper_register = AndroidJNI.GetStaticMethodID(unityHelper_class, "register", "()V");
+                AndroidJNI.CallStaticVoidMethod(unityHelper_class, unityHelper_register, new jvalue[0]);
+            }
+        }
     }
 }
