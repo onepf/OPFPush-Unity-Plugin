@@ -1,0 +1,4 @@
+*.csproj
+*.Unity.CSharp.Plugins.csproj
+*.Unity.v12.suo
+*.sln
