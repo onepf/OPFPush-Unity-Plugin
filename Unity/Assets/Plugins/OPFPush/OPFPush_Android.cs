@@ -54,6 +54,7 @@ namespace OnePF.Push
             addProviders_args[0].l = providersArray;
             AndroidJNI.CallObjectMethod(configBuilder, configBuilder_addProviders, addProviders_args);
 
+            /*
             // UnityEventListener
             IntPtr eventListener_class = AndroidJNI.FindClass("org/onepf/opfpush/unity/listener/UnityEventListener");
             IntPtr eventListener_constructor = AndroidJNI.GetMethodID(eventListener_class, "<init>", "(Landroid/content/Context;)V");
@@ -66,7 +67,8 @@ namespace OnePF.Push
             jvalue[] listener_args = new jvalue[1];
             listener_args[0].l = eventListener;
             AndroidJNI.CallObjectMethod(configBuilder, configBuilder_setEventListener, listener_args);
-
+             */ 
+            
             // configBuilder.build
             IntPtr configBuilder_build = AndroidJNI.GetMethodID(configBuilder_class, "build", "()Lorg/onepf/opfpush/configuration/Configuration;");
             IntPtr config = AndroidJNI.CallObjectMethod(configBuilder, configBuilder_build, new jvalue[0]);
