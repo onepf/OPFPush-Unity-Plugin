@@ -1,4 +1,4 @@
-﻿namespace OnePF.Push
+﻿namespace OnePF.OPFPush
 {
     public class GCMProvider : IPushProvider
     {

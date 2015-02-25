@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace OnePF.Push
+namespace OnePF.OPFPush
 {
     public class NokiaProvider : IPushProvider
     {

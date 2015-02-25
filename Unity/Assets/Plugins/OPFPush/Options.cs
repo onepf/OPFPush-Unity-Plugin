@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace OnePF.Push
+namespace OnePF.OPFPush
 {
     public class Options
     {
@@ -9,7 +9,7 @@ namespace OnePF.Push
         public bool RecoverProvider { get; set; }
         public bool SelectSystemPreferred { get; set; }
 
-        public IEnumerable<IPushProvider> PushProviders { get { return _pushProviders; } }
+        public List<IPushProvider> PushProviders { get { return _pushProviders; } }
 
         public void AddProvider(IPushProvider provider)
         {

@@ -2,13 +2,11 @@
 using System.Collections;
 using System;
 
-namespace OnePF.Push
+namespace OnePF.OPFPush
 {
-    public class OPFPush_Android : MonoBehaviour
+    public class OPFPush_Android : IOPFPush
     {
-        const string GCM_SENDER_ID = "539088697591";
-
-        void Awake()
+        public void Init(Options options)
         {
             if (Application.platform != RuntimePlatform.Android)
                 return;
@@ -33,28 +31,53 @@ namespace OnePF.Push
             IntPtr configBuilder_constructor = AndroidJNI.GetMethodID(configBuilder_class, "<init>", "()V");
             IntPtr configBuilder = AndroidJNI.NewObject(configBuilder_class, configBuilder_constructor, new jvalue[0]);
 
-            // GCM
-            IntPtr gcm_class = AndroidJNI.FindClass("org/onepf/opfpush/gcm/GCMProvider");
-            IntPtr gcm_constructor = AndroidJNI.GetMethodID(gcm_class, "<init>", "(Landroid/content/Context;Ljava/lang/String;)V");
-            jvalue[] gcm_args = new jvalue[2];
-            gcm_args[0].l = context;
-            gcm_args[1].l = AndroidJNI.NewStringUTF(GCM_SENDER_ID);
-            IntPtr gcm = AndroidJNI.NewObject(gcm_class, gcm_constructor, gcm_args);
+            if (options.PushProviders.Count > 0)
+            {
+                // Array of push providers
+                IntPtr array_class = AndroidJNI.FindClass("org/onepf/opfpush/PushProvider");
+                IntPtr nullProvider = new IntPtr();
+                IntPtr providersArray = AndroidJNI.NewObjectArray(options.PushProviders.Count, array_class, nullProvider);
 
-            // Configuration.Builder.addProviders
-            IntPtr configBuilder_addProviders = AndroidJNI.GetMethodID(configBuilder_class, "addProviders", "([Lorg/onepf/opfpush/PushProvider;)Lorg/onepf/opfpush/configuration/Configuration$Builder;");
-            jvalue[] addProviders_args = new jvalue[1];
+                for (int i = 0; i < options.PushProviders.Count; ++i)
+                {
+                    var pushProvider = options.PushProviders[i];
+                    IntPtr provider = IntPtr.Zero;
+                    if (pushProvider.GetType() == typeof(GCMProvider))
+                    {
+                        GCMProvider gcmProvider = pushProvider as GCMProvider;
 
-            // Array of push providers
-            IntPtr array_class = AndroidJNI.FindClass("org/onepf/opfpush/PushProvider");
-            IntPtr nullProvider = new IntPtr();
-            IntPtr providersArray = AndroidJNI.NewObjectArray(1, array_class, nullProvider);
-            AndroidJNI.SetObjectArrayElement(providersArray, 0, gcm);
+                        // GCM
+                        IntPtr gcm_class = AndroidJNI.FindClass("org/onepf/opfpush/gcm/GCMProvider");
+                        IntPtr gcm_constructor = AndroidJNI.GetMethodID(gcm_class, "<init>", "(Landroid/content/Context;Ljava/lang/String;)V");
+                        jvalue[] gcm_args = new jvalue[2];
+                        gcm_args[0].l = context;
+                        gcm_args[1].l = AndroidJNI.NewStringUTF(gcmProvider.SenderID);
+                        provider = AndroidJNI.NewObject(gcm_class, gcm_constructor, gcm_args);
+                    }
+                    else if (pushProvider.GetType() == typeof(ADMProvider))
+                    {
+                        // TODO: implement
+                    }
+                    else if (pushProvider.GetType() == typeof(NokiaProvider))
+                    {
+                        // TODO: implement
+                    }
+                    
+                    if (provider == IntPtr.Zero)
+                        Debug.LogWarning("Unsupported provider type: " + pushProvider.GetType());
+                    else
+                        AndroidJNI.SetObjectArrayElement(providersArray, i, provider);
+                }
 
-            addProviders_args[0].l = providersArray;
-            AndroidJNI.CallObjectMethod(configBuilder, configBuilder_addProviders, addProviders_args);
+                // Configuration.Builder.addProviders
+                IntPtr configBuilder_addProviders = AndroidJNI.GetMethodID(configBuilder_class, "addProviders", "([Lorg/onepf/opfpush/PushProvider;)Lorg/onepf/opfpush/configuration/Configuration$Builder;");
+                jvalue[] addProviders_args = new jvalue[options.PushProviders.Count];
+                addProviders_args[0].l = providersArray;
+                AndroidJNI.CallObjectMethod(configBuilder, configBuilder_addProviders, addProviders_args);
+            }
 
             /*
+            // TODO: remove or debug
             // UnityEventListener
             IntPtr eventListener_class = AndroidJNI.FindClass("org/onepf/opfpush/unity/listener/UnityEventListener");
             IntPtr eventListener_constructor = AndroidJNI.GetMethodID(eventListener_class, "<init>", "(Landroid/content/Context;)V");
@@ -100,16 +123,19 @@ namespace OnePF.Push
             init_args[0].l = context;
             init_args[1].l = config;
             AndroidJNI.CallStaticVoidMethod(unityHelper_class, unityHelper_init, init_args);
+
+            IntPtr unityHelper_register = AndroidJNI.GetStaticMethodID(unityHelper_class, "register", "()V");
+            AndroidJNI.CallStaticVoidMethod(unityHelper_class, unityHelper_register, new jvalue[0]);
         }
 
-        void OnGUI()
-        {
-            if (GUI.Button(new Rect(10, 10, Screen.width / 4, Screen.height / 8), "Register"))
-            {
-                IntPtr unityHelper_class = AndroidJNI.FindClass("org/onepf/opfpush/unity/UnityHelper");
-                IntPtr unityHelper_register = AndroidJNI.GetStaticMethodID(unityHelper_class, "register", "()V");
-                AndroidJNI.CallStaticVoidMethod(unityHelper_class, unityHelper_register, new jvalue[0]);
-            }
-        }
+        //void Register()
+        //{
+        //    if (GUI.Button(new Rect(10, 10, Screen.width / 4, Screen.height / 8), "Register"))
+        //    {
+        //        IntPtr unityHelper_class = AndroidJNI.FindClass("org/onepf/opfpush/unity/UnityHelper");
+        //        IntPtr unityHelper_register = AndroidJNI.GetStaticMethodID(unityHelper_class, "register", "()V");
+        //        AndroidJNI.CallStaticVoidMethod(unityHelper_class, unityHelper_register, new jvalue[0]);
+        //    }
+        //}
     }
 }
