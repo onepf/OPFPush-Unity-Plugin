@@ -18,6 +18,8 @@ public class OPFPushTest : MonoBehaviour
     {
         Options options = new Options();
         options.AddProvider(new GCMProvider("539088697591"));
+        options.AddProvider(new ADMProvider());
+        options.AddProvider(new NokiaProvider(new string[] { "one", "two" }));
         OPFPush.Init(options);
     }
 
