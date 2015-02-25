@@ -21,7 +21,7 @@ namespace OnePF.OPFPush
             push.InitFinished += delegate(bool success, string errorMessage) { if (InitFinished != null) InitFinished(success, errorMessage); };
             _push = push;
 #elif UNITY_WP8
-            var push = new OpenPush_WP8();
+            var push = new OPFPush_WP8();
             push.InitFinished += delegate(bool success, string errorMessage) { if (InitFinished != null) InitFinished(success, errorMessage); };
             _push = push;            
 #else
