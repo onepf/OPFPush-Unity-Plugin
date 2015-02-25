@@ -17,7 +17,7 @@ namespace OnePF.OPFPush
 #if UNITY_ANDROID
             _push = new OPFPush_Android();
 #elif UNITY_IOS
-            var push = new OpenPush_iOS();
+            var push = new OPFPush_iOS();
             push.InitFinished += delegate(bool success, string errorMessage) { if (InitFinished != null) InitFinished(success, errorMessage); };
             _push = push;
 #elif UNITY_WP8
