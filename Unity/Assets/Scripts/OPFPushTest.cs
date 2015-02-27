@@ -20,11 +20,14 @@ public class OPFPushTest : MonoBehaviour
         options.AddProvider(new GCMProvider("539088697591"));
         options.AddProvider(new ADMProvider());
         options.AddProvider(new NokiaProvider(new string[] { "one", "two" }));
+
+        options.IsLogEnabled = true;
+
         OPFPush.Init(options);
     }
 
-    void OpenPush_InitFinished(bool success, string errorMessage)
+    void OpenPush_InitFinished(bool success, string message)
     {
-        Debug.Log(string.Format("OPFPush. Init Finished: {0}; {1}", success, errorMessage));
+        Debug.Log(string.Format("OPFPush. Init Finished: {0}; {1}", success, message));
     }
 }

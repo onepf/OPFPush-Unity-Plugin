@@ -18,14 +18,17 @@ namespace OnePF.OPFPush
             AndroidJavaClass unityPlayer = new AndroidJavaClass("com/unity3d/player/UnityPlayer");
             IntPtr context = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity").GetRawObject();
 
-            // OPFPushLog
-            IntPtr log_class = AndroidJNI.FindClass("org/onepf/opfpush/OPFPushLog");
+            if (options.IsLogEnabled)
+            {
+                // OPFPushLog
+                IntPtr log_class = AndroidJNI.FindClass("org/onepf/opfutils/OPFLog");
 
-            // OPFPushLog.setLogEnable
-            IntPtr log_setLogEnable = AndroidJNI.GetStaticMethodID(log_class, "setLogEnable", "(Z)V");
-            jvalue[] log_args = new jvalue[1];
-            log_args[0].z = true;
-            AndroidJNI.CallStaticVoidMethod(log_class, log_setLogEnable, log_args);
+                // OPFPushLog.setLogEnable
+                IntPtr log_setEnabled = AndroidJNI.GetStaticMethodID(log_class, "setEnabled", "(Z)V");
+                jvalue[] log_args = new jvalue[1];
+                log_args[0].z = true;
+                AndroidJNI.CallStaticVoidMethod(log_class, log_setEnabled, log_args);
+            }
 
             // Configuration.Builder
             IntPtr configBuilder_class = AndroidJNI.FindClass("org/onepf/opfpush/configuration/Configuration$Builder");

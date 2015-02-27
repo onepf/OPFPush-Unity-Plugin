@@ -5,7 +5,7 @@ namespace OnePF.OPFPush
 {
     public static class OPFPush
     {
-        public delegate void InitFinishedDelegate(bool success, string errorMessage);
+        public delegate void InitFinishedDelegate(bool success, string message);
         public static event InitFinishedDelegate InitFinished;
 
         static IOPFPush _push = null;
@@ -36,10 +36,10 @@ namespace OnePF.OPFPush
             {
                 _eventReceiver = new GameObject("OPFPush").AddComponent<EventReceiver>();
 
-                _eventReceiver.InitSucceded += delegate()
+                _eventReceiver.InitSucceded += delegate(string registrationID)
                 {
                     if (InitFinished != null)
-                        InitFinished(true, "");
+                        InitFinished(true, registrationID);
                 };
 
                 _eventReceiver.InitFailed += delegate(string error)
