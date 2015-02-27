@@ -21,7 +21,7 @@ public class OPFPushTest : MonoBehaviour
         options.AddProvider(new ADMProvider());
         options.AddProvider(new NokiaProvider(new string[] { "one", "two" }));
 
-        options.IsLogEnabled = true;
+        options.LogEnabled = true;
 
         OPFPush.Init(options);
     }

@@ -6,8 +6,7 @@ namespace OnePF.OPFPush
     {
         List<IPushProvider> _pushProviders = new List<IPushProvider>();
 
-        public bool IsLogEnabled { get; set; }
-        public bool RecoverProvider { get; set; }
+        public bool LogEnabled { get; set; }
         public bool SelectSystemPreferred { get; set; }
 
         public List<IPushProvider> PushProviders { get { return _pushProviders; } }

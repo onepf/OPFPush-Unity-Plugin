@@ -18,7 +18,7 @@ namespace OnePF.OPFPush
             AndroidJavaClass unityPlayer = new AndroidJavaClass("com/unity3d/player/UnityPlayer");
             IntPtr context = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity").GetRawObject();
 
-            if (options.IsLogEnabled)
+            if (options.LogEnabled)
             {
                 // OPFPushLog
                 IntPtr log_class = AndroidJNI.FindClass("org/onepf/opfutils/OPFLog");
@@ -34,6 +34,13 @@ namespace OnePF.OPFPush
             IntPtr configBuilder_class = AndroidJNI.FindClass("org/onepf/opfpush/configuration/Configuration$Builder");
             IntPtr configBuilder_constructor = AndroidJNI.GetMethodID(configBuilder_class, "<init>", "()V");
             IntPtr configBuilder = AndroidJNI.NewObject(configBuilder_class, configBuilder_constructor, new jvalue[0]);
+
+            //// Options
+            // setSelectSystemPreferred
+            IntPtr configBuilder_setSelectSystemPreferred = AndroidJNI.GetMethodID(configBuilder_class, "setSelectSystemPreferred", "(Z)Lorg/onepf/opfpush/configuration/Configuration$Builder;");
+            jvalue[] option_args = new jvalue[1];
+            option_args[0].z = options.SelectSystemPreferred;
+            AndroidJNI.CallObjectMethod(configBuilder, configBuilder_setSelectSystemPreferred, option_args);
 
             if (options.PushProviders.Count > 0)
             {
