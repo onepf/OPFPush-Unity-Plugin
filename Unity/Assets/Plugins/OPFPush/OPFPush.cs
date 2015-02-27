@@ -18,11 +18,11 @@ namespace OnePF.OPFPush
             _push = new OPFPush_Android();
 #elif UNITY_IOS
             var push = new OPFPush_iOS();
-            push.InitFinished += delegate(bool success, string errorMessage) { if (InitFinished != null) InitFinished(success, errorMessage); };
+            push.InitFinished += delegate(bool success, string message) { if (InitFinished != null) InitFinished(success, message); };
             _push = push;
 #elif UNITY_WP8
             var push = new OPFPush_WP8();
-            push.InitFinished += delegate(bool success, string errorMessage) { if (InitFinished != null) InitFinished(success, errorMessage); };
+            push.InitFinished += delegate(bool success, string message) { if (InitFinished != null) InitFinished(success, message); };
             _push = push;            
 #else
 			Debug.LogError("OPFPush is currently not supported on this platform. Sorry.");

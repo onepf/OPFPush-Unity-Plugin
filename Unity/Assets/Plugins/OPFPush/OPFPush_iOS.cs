@@ -16,10 +16,10 @@ namespace OnePF.OPFPush
 			_helper.Init();
         }
 
-        void Helper_InitFinished(bool success, string errorMessage)
+        void Helper_InitFinished(bool success, string message)
         {
             if (InitFinished != null)
-                InitFinished(success, errorMessage);
+                InitFinished(success, message);
         }
     }
 }

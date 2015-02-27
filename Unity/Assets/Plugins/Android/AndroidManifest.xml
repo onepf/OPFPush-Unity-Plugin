@@ -115,7 +115,7 @@
         
         <!--opf-->
         <receiver
-            android:name="org.onepf.opfpush.unity.receiver.DemoOPFPushReceiver"
+            android:name="org.onepf.opfpush.unity.receiver.UnityOPFPushReceiver"
             android:exported="false">
 
             <intent-filter>

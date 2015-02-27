@@ -68,7 +68,7 @@ namespace OnePF.OPFPush.WP8
         {
             Deployment.Current.Dispatcher.BeginInvoke(() => {
                 if (InitFinished != null)
-                    InitFinished(true, "");
+                    InitFinished(true, e.ChannelUri.OriginalString);
             });
         }
 

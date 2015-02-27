@@ -31,7 +31,7 @@ namespace OnePF.OPFPush
 					_token = System.BitConverter.ToString(token).Replace("-", "");
 					Debug.Log("Token received: " + _token);
                     if (InitFinished != null)
-                        InitFinished(true, "");
+                        InitFinished(true, _token);
 					yield break;
 				}
 				yield return new WaitForFixedUpdate();
