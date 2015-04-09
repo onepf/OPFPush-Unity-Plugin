@@ -24,9 +24,10 @@ namespace OnePF.OPFPush
                 IntPtr log_class = AndroidJNI.FindClass("org/onepf/opfutils/OPFLog");
 
                 // OPFPushLog.setLogEnable
-                IntPtr log_setEnabled = AndroidJNI.GetStaticMethodID(log_class, "setEnabled", "(Z)V");
-                jvalue[] log_args = new jvalue[1];
-                log_args[0].z = true;
+                IntPtr log_setEnabled = AndroidJNI.GetStaticMethodID(log_class, "setEnabled", "(ZZ)V");
+                jvalue[] log_args = new jvalue[2];
+                log_args[0].z = true; //TODO get from BuildConfig.DEBUG
+				log_args[1].z = true;
                 AndroidJNI.CallStaticVoidMethod(log_class, log_setEnabled, log_args);
             }
 
@@ -45,7 +46,7 @@ namespace OnePF.OPFPush
             if (options.PushProviders.Count > 0)
             {
                 // Array of push providers
-                IntPtr array_class = AndroidJNI.FindClass("org/onepf/opfpush/PushProvider");
+                IntPtr array_class = AndroidJNI.FindClass("org/onepf/opfpush/pushprovider/PushProvider");
                 IntPtr nullProvider = new IntPtr();
                 IntPtr providersArray = AndroidJNI.NewObjectArray(options.PushProviders.Count, array_class, nullProvider);
 
@@ -99,7 +100,7 @@ namespace OnePF.OPFPush
                 }
 
                 // Configuration.Builder.addProviders
-                IntPtr configBuilder_addProviders = AndroidJNI.GetMethodID(configBuilder_class, "addProviders", "([Lorg/onepf/opfpush/PushProvider;)Lorg/onepf/opfpush/configuration/Configuration$Builder;");
+                IntPtr configBuilder_addProviders = AndroidJNI.GetMethodID(configBuilder_class, "addProviders", "([Lorg/onepf/opfpush/pushprovider/PushProvider;)Lorg/onepf/opfpush/configuration/Configuration$Builder;");
                 jvalue[] addProviders_args = new jvalue[options.PushProviders.Count];
                 addProviders_args[0].l = providersArray;
                 AndroidJNI.CallObjectMethod(configBuilder, configBuilder_addProviders, addProviders_args);
