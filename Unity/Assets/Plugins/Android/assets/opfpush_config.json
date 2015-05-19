@@ -1,0 +1,6 @@
+{
+   "debug":true,
+   "logEnabled":true,
+   "providers":["GCM", "ADM", "Nokia"],
+   "selectSystemPreferred":true
+}
