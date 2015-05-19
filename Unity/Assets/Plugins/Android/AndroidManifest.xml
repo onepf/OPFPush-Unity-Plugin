@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:amazon="http://schemas.amazon.com/apk/res/android"
     package="com.unity3d.player"
 	android:installLocation="preferExternal"
 	android:theme="@android:style/Theme.NoTitleBar"
@@ -12,12 +13,18 @@
         android:largeScreens="true"
         android:xlargeScreens="true"
         android:anyDensity="true"/>
-
+        
+    <uses-sdk
+        android:minSdkVersion="15"
+        android:targetSdkVersion="22" />
+        
     <!--adm-->
     <permission android:name="org.onepf.push.test.permission.RECEIVE_ADM_MESSAGE" />
     <uses-permission
         android:name="org.onepf.push.test.permission.RECEIVE_ADM_MESSAGE"
         android:protectionLevel="signature" />
+    
+    <uses-permission android:name="com.amazon.device.messaging.permission.RECEIVE" />
 
     <!--gcm-->
     <uses-permission android:name="org.onepf.push.test.permission.C2D_MESSAGE" />
@@ -27,20 +34,21 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
         
-    <!--nokia--> <!--Same as gcm-->
+    <!--nokia-->
+    <uses-permission android:name="com.nokia.pushnotifications.permission.RECEIVE" /> 
     
+    <!---opfpush-->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission
-        android:name="android.permission.BROADCAST_PACKAGE_REMOVED"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
         
     <application
 		android:icon="@drawable/app_icon"
         android:label="@string/app_name"
-        android:debuggable="true">
+        android:debuggable="true"
+        android:name="org.onepf.opfpush.unity.OPFPushApplication">
         <activity android:name="com.unity3d.player.UnityPlayerNativeActivity"
                   android:label="@string/app_name">
             <intent-filter>
@@ -49,10 +57,7 @@
             </intent-filter>
             <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
             <meta-data android:name="unityplayer.ForwardNativeEventsToDalvik" android:value="false" />
-        </activity>
-        
-        <meta-data android:name="com.google.android.gms.version"
-               android:value="@integer/google_play_services_version"/>
+        </activity>        
         
         <!--adm-->
         <receiver
@@ -66,8 +71,26 @@
                 <category android:name="org.onepf.push.test" />
             </intent-filter>
         </receiver>
+        
+        <amazon:enable-feature
+            android:name="com.amazon.device.messaging"
+            android:required="false" />
+            
+        <service
+            android:name="org.onepf.opfpush.adm.ADMService"
+            android:exported="false" />
+            
+        <receiver android:name="org.onepf.opfpush.adm.LoginAccountsChangedReceiver" >
+            <intent-filter>
+                <action android:name="android.accounts.LOGIN_ACCOUNTS_CHANGED" />
+            </intent-filter>
+        </receiver>
 
         <!--gcm-->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        
         <receiver
             android:name="org.onepf.opfpush.gcm.GCMReceiver"
             android:exported="true"
@@ -106,14 +129,29 @@
             </intent-filter>
         </receiver>
         
+        <service
+            android:name="org.onepf.opfpush.nokia.NokiaNotificationService"
+            android:exported="false" />
+        
+        <!--opfpush-->
         <receiver android:name="org.onepf.opfpush.BootCompleteReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
+
+        <receiver android:name="org.onepf.opfpush.PackageChangeReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+        
         <receiver android:name="org.onepf.opfpush.RetryBroadcastReceiver"/>
         
-        <!--opf-->
+        <!--opf unity-->
         <receiver
             android:name="org.onepf.opfpush.unity.receiver.UnityOPFPushReceiver"
             android:exported="false">

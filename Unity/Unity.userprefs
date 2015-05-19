@@ -1,19 +1,21 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Plugins/Android/AndroidManifest.xml">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Plugins/Android/assets/configuration.txt">
     <Files>
-      <File FileName="Assets/Plugins/OPFPush/Providers/GCMProvider.cs" Line="7" Column="9" />
+      <File FileName="Assets/Scripts/OPFPushTest.cs" Line="33" Column="2" />
       <File FileName="Assets/Plugins/OPFPush/Providers/ADMProvider.cs" Line="1" Column="1" />
+      <File FileName="Assets/Plugins/OPFPush/Providers/GCMProvider.cs" Line="1" Column="1" />
       <File FileName="Assets/Plugins/OPFPush/Providers/NokiaProvider.cs" Line="1" Column="1" />
       <File FileName="Assets/Plugins/OPFPush/EventReceiver.cs" Line="1" Column="1" />
       <File FileName="Assets/Plugins/OPFPush/IOPFPush.cs" Line="1" Column="1" />
       <File FileName="Assets/Plugins/OPFPush/IPushProvider.cs" Line="1" Column="1" />
-      <File FileName="Assets/Plugins/OPFPush/OPFPush.cs" Line="6" Column="28" />
-      <File FileName="Assets/Scripts/OPFPushTest.cs" Line="5" Column="41" />
-      <File FileName="Assets/Plugins/Android/AndroidManifest.xml" Line="129" Column="53" />
+      <File FileName="Assets/Plugins/OPFPush/OPFPush.cs" Line="1" Column="1" />
       <File FileName="Assets/Plugins/OPFPush/OPFPush_iOS.cs" Line="1" Column="1" />
       <File FileName="Assets/Plugins/OPFPush/Options.cs" Line="1" Column="1" />
-      <File FileName="Assets/Plugins/OPFPush/OPFPush_Android.cs" Line="37" Column="120" />
+      <File FileName="Assets/Plugins/OPFPush/OPFPush_Android.cs" Line="1" Column="1" />
+      <File FileName="Assets/Plugins/Android/AndroidManifest.xml" Line="1" Column="1" />
+      <File FileName="Assets/Plugins/Android/assets/configuration.txt" Line="1" Column="3" />
+      <File FileName="Assets/Plugins/Android/res/values/common_strings.xml" Line="58" Column="20" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
