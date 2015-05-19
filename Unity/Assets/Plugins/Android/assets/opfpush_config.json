@@ -1,6 +1,10 @@
 {
    "debug":true,
    "logEnabled":true,
-   "providers":["GCM", "ADM", "Nokia"],
+   "providers":[
+   		{"name":"GCM", "senderId":"539088697591"}, 
+   		{"name":"ADM"}, 
+   		{"name":"Nokia", "senderId":"pushsample"}
+   	],
    "selectSystemPreferred":true
 }

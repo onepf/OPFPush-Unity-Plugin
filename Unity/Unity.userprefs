@@ -13,7 +13,7 @@
       <File FileName="Assets/Plugins/OPFPush/OPFPush_iOS.cs" Line="1" Column="1" />
       <File FileName="Assets/Plugins/OPFPush/Options.cs" Line="1" Column="1" />
       <File FileName="Assets/Plugins/OPFPush/OPFPush_Android.cs" Line="1" Column="1" />
-      <File FileName="Assets/Plugins/Android/AndroidManifest.xml" Line="13" Column="36" />
+      <File FileName="Assets/Plugins/Android/AndroidManifest.xml" Line="35" Column="69" />
       <File FileName="Assets/Plugins/Android/res/values/common_strings.xml" Line="58" Column="20" />
       <File FileName="Assets/Plugins/Android/res/values/version.xml" Line="3" Column="67" />
     </Files>

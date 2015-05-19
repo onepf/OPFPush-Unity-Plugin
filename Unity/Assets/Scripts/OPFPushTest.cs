@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using OnePF.OPFPush;
+using System;
 
 public class OPFPushTest : MonoBehaviour
 {
@@ -16,14 +17,10 @@ public class OPFPushTest : MonoBehaviour
 
     void Start()
     {
-        Options options = new Options();
-        options.AddProvider(new GCMProvider("539088697591"));
-        options.AddProvider(new ADMProvider());
-        options.AddProvider(new NokiaProvider(new string[] { "one", "two" }));
-
-        options.LogEnabled = true;
-
-        OPFPush.Init(options);
+		//TODO move to OPFPush class
+		IntPtr unityHelper_class = AndroidJNI.FindClass("org/onepf/opfpush/unity/UnityHelper");
+		IntPtr unityHelper_register = AndroidJNI.GetStaticMethodID(unityHelper_class, "register", "()V");
+		AndroidJNI.CallStaticVoidMethod(unityHelper_class, unityHelper_register, new jvalue[0]);
     }
 
     void OpenPush_InitFinished(bool success, string message)
