@@ -9,16 +9,14 @@ namespace OnePF.OPFPush
     {
         public void Register() 
 		{
-			IntPtr unityHelper_class = AndroidJNI.FindClass("org/onepf/opfpush/unity/UnityHelper");
-			IntPtr unityHelper_register = AndroidJNI.GetStaticMethodID(unityHelper_class, "register", "()V");
-			AndroidJNI.CallStaticVoidMethod(unityHelper_class, unityHelper_register, new jvalue[0]);
+			AndroidJavaClass unityHelper_class = new AndroidJavaClass ("org.onepf.opfpush.unity.UnityHelper");
+			unityHelper_class.CallStatic("register");
 		}
 
 		public void Unregister()
 		{
-			IntPtr unityHelper_class = AndroidJNI.FindClass("org/onepf/opfpush/unity/UnityHelper");
-			IntPtr unityHelper_register = AndroidJNI.GetStaticMethodID(unityHelper_class, "unregister", "()V");
-			AndroidJNI.CallStaticVoidMethod(unityHelper_class, unityHelper_register, new jvalue[0]);
+			AndroidJavaClass unityHelper_class = new AndroidJavaClass ("org.onepf.opfpush.unity.UnityHelper");
+			unityHelper_class.CallStatic("unregister");
 		}
     }
 }
