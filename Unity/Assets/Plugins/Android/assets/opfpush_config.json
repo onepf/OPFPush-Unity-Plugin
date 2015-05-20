@@ -2,7 +2,7 @@
    "debug":true,
    "logEnabled":true,
    "providers":[
-   		{"name":"GCM", "senderId":"539088697591"}, 
+   		{"name":"GCM", "senderId":"707033278505"}, 
    		{"name":"ADM"}, 
    		{"name":"Nokia", "senderId":"pushsample"}
    	],

@@ -19,17 +19,17 @@
         android:targetSdkVersion="22" />
         
     <!--adm-->
-    <permission android:name="org.onepf.push.test.permission.RECEIVE_ADM_MESSAGE" />
+    <permission android:name="org.onepf.opfpush.pushsample.permission.RECEIVE_ADM_MESSAGE" />
     <uses-permission
-        android:name="org.onepf.push.test.permission.RECEIVE_ADM_MESSAGE"
+        android:name="org.onepf.opfpush.pushsample.permission.RECEIVE_ADM_MESSAGE"
         android:protectionLevel="signature" />
     
     <uses-permission android:name="com.amazon.device.messaging.permission.RECEIVE" />
 
     <!--gcm-->
-    <uses-permission android:name="org.onepf.push.test.permission.C2D_MESSAGE" />
+    <uses-permission android:name="org.onepf.opfpush.pushsample.permission.C2D_MESSAGE" />
     <permission
-        android:name="org.onepf.push.test.permission.C2D_MESSAGE"
+        android:name="org.onepf.opfpush.pushsample.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -68,7 +68,7 @@
                 <action android:name="com.amazon.device.messaging.intent.REGISTRATION" />
                 <action android:name="com.amazon.device.messaging.intent.RECEIVE" />
 
-                <category android:name="org.onepf.push.test" />
+                <category android:name="org.onepf.opfpush.pushsample" />
             </intent-filter>
         </receiver>
         
@@ -97,11 +97,11 @@
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="org.onepf.push.test" />
+                <category android:name="org.onepf.opfpush.pushsample" />
             </intent-filter>
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-                <category android:name="org.onepf.push.test" />
+                <category android:name="org.onepf.opfpush.pushsample" />
             </intent-filter>
             <intent-filter>
                 <action android:name="org.onepf.opfpush.gcm.intent.UNREGISTRATION" />
@@ -125,7 +125,7 @@
                 <!-- Receives the registration id. -->
                 <action android:name="com.nokia.pushnotifications.intent.REGISTRATION" />
 
-                <category android:name="org.onepf.push.test" />
+                <category android:name="org.onepf.opfpush.pushsample" />
             </intent-filter>
         </receiver>
         
