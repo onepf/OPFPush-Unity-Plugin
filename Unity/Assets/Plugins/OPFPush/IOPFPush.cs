@@ -2,6 +2,6 @@
 {
     public interface IOPFPush
     {
-        void Init(Options options);
+        
     }
 }
