@@ -7,24 +7,49 @@ public class OPFPushTest : MonoBehaviour
 {
     void OnEnable()
     {
-        OPFPush.InitFinished += OpenPush_InitFinished;
+        OPFPush.OnMessage += OPFPush_OnMessage;
+		OPFPush.OnDeletedMessages += OPFPush_OnDeletedMessages;
+		OPFPush.OnRegistered += OPFPush_OnRegistered;
+		OPFPush.OnUnregistered += OPFPush_OnUnregistered;
+		OPFPush.OnNoAvailableProvider += OPFPush_OnNoAvailableProvider;
     }
 
     void OnDisable()
     {
-        OPFPush.InitFinished -= OpenPush_InitFinished;
+		OPFPush.OnMessage -= OPFPush_OnMessage;
+		OPFPush.OnDeletedMessages -= OPFPush_OnDeletedMessages;
+		OPFPush.OnRegistered -= OPFPush_OnRegistered;
+		OPFPush.OnUnregistered -= OPFPush_OnUnregistered;
+		OPFPush.OnNoAvailableProvider -= OPFPush_OnNoAvailableProvider;
     }
 
     void Start()
     {
-		//TODO move to OPFPush class
-		IntPtr unityHelper_class = AndroidJNI.FindClass("org/onepf/opfpush/unity/UnityHelper");
-		IntPtr unityHelper_register = AndroidJNI.GetStaticMethodID(unityHelper_class, "register", "()V");
-		AndroidJNI.CallStaticVoidMethod(unityHelper_class, unityHelper_register, new jvalue[0]);
+		OPFPush.Register ();
     }
 
-    void OpenPush_InitFinished(bool success, string message)
-    {
-        Debug.Log(string.Format("OPFPush. Init Finished: {0}; {1}", success, message));
-    }
+	void OPFPush_OnMessage(string message)
+	{
+		Debug.Log (string.Format ("OPFPush. OnMessage: {0}", message));
+	}
+
+	void OPFPush_OnDeletedMessages(string messagesCount)
+	{
+		Debug.Log (string.Format ("OPFPush. OnDeletedMessages: {0}", messagesCount));
+	}
+
+	void OPFPush_OnRegistered(string registrationId)
+	{
+		Debug.Log (string.Format ("OPFPush. OnRegistered: {0}", registrationId));
+	}
+
+	void OPFPush_OnUnregistered(string oldRegistrationId)
+	{
+		Debug.Log (string.Format ("OPFPush. OnUnregistered: {0}", oldRegistrationId));
+	}
+
+	void OPFPush_OnNoAvailableProvider(string error)
+	{
+		Debug.Log (string.Format ("OPFPush. OnNoAvailableProvider: {0}", error));
+	}
 }

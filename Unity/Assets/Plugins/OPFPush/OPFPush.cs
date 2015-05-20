@@ -5,8 +5,17 @@ namespace OnePF.OPFPush
 {
     public static class OPFPush
     {
-        public delegate void InitFinishedDelegate(bool success, string message);
-        public static event InitFinishedDelegate InitFinished;
+		public delegate void MessageDelegate(string message);
+		public delegate void MessagesDeletedDelegate(string messagesCount);
+		public delegate void RegisteredDelegate(string registrationId);
+		public delegate void UnregisteredDelegate(string oldRegistrationId);
+		public delegate void NoAvailableProviderDelegate(string error);
+
+		public static event MessageDelegate OnMessage;
+		public static event MessagesDeletedDelegate OnDeletedMessages;
+		public static event RegisteredDelegate OnRegistered;
+		public static event UnregisteredDelegate OnUnregistered;
+		public static event NoAvailableProviderDelegate OnNoAvailableProvider;
 
         static IOPFPush _push = null;
 
@@ -22,26 +31,56 @@ namespace OnePF.OPFPush
 #endif
         }
 
-        public static void Init(Options options)
-        {
-            if (_eventReceiver == null)
-            {
-                _eventReceiver = new GameObject("OPFPush").AddComponent<EventReceiver>();
+		public static void Register()
+		{
+			initEventReceiver ();
+			_push.Register ();
+		}
 
-                _eventReceiver.InitSucceded += delegate(string registrationID)
-                {
-                    if (InitFinished != null)
-                        InitFinished(true, registrationID);
-                };
+		public static void Unregister()
+		{
+			initEventReceiver ();
+			_push.Unregister ();
+		}
 
-                _eventReceiver.InitFailed += delegate(string error)
-                {
-                    if (InitFinished != null)
-                        InitFinished(false, error);
-                };
-            }
+	    private static void initEventReceiver()
+		{
+			if (_eventReceiver == null) 
+			{
+				_eventReceiver = new GameObject("OPFPush").AddComponent<EventReceiver>();
 
-            _push.Init(options);
-        }
+				_eventReceiver.OnMessageAction += delegate(string message)
+				{
+					if (OnMessage != null)
+						OnMessage(message);
+				};
+
+				_eventReceiver.OnDeletedMessageAction += delegate(string messagesCount)
+				{
+					if (OnDeletedMessages != null)
+						OnDeletedMessages(messagesCount);
+				};
+
+				_eventReceiver.OnRegisteredAction += delegate(string registrationId)
+				{
+					if (OnRegistered != null)
+					{				
+						OnRegistered(registrationId);
+					}
+				};
+
+				_eventReceiver.OnUnregisteredAction += delegate(string oldRegistrationId)
+				{
+					if (OnUnregistered != null)
+						OnUnregistered(oldRegistrationId);
+				};
+
+				_eventReceiver.OnNoAvailableProviderActon += delegate(string error)
+				{
+					if (OnNoAvailableProvider != null)
+						OnNoAvailableProvider(error);
+				};
+			}
+		}
     }
 }

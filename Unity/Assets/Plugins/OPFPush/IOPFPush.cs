@@ -2,6 +2,8 @@
 {
     public interface IOPFPush
     {
-        
+		void Register();
+
+		void Unregister();
     }
 }
