@@ -149,20 +149,7 @@
             </intent-filter>
         </receiver>
         
-        <receiver android:name="org.onepf.opfpush.RetryBroadcastReceiver"/>
-        
-        <!--opf unity-->
-        <receiver
-            android:name="org.onepf.opfpush.unity.receiver.UnityOPFPushReceiver"
-            android:exported="false">
-
-            <intent-filter>
-                <action android:name="org.onepf.opfpush.intent.NO_AVAILABLE_PROVIDER" />
-                <action android:name="org.onepf.opfpush.intent.RECEIVE" />
-                <action android:name="org.onepf.opfpush.intent.REGISTRATION" />
-                <action android:name="org.onepf.opfpush.intent.UNREGISTRATION" />
-            </intent-filter>
-        </receiver>
+        <receiver android:name="org.onepf.opfpush.RetryBroadcastReceiver"/>        
         
     </application>
 </manifest>
