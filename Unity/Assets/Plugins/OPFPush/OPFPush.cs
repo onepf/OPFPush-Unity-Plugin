@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace OnePF.OPFPush
 {
     public static class OPFPush
     {
-		public delegate void MessageDelegate(string message);
-		public delegate void MessagesDeletedDelegate(string messagesCount);
-		public delegate void RegisteredDelegate(string registrationId);
-		public delegate void UnregisteredDelegate(string oldRegistrationId);
-		public delegate void NoAvailableProviderDelegate(string error);
+		public delegate void MessageDelegate(string providerName, Dictionary<string, string> data);
+		public delegate void MessagesDeletedDelegate(string providerName, int messagesCount);
+		public delegate void RegisteredDelegate(string providerName, string registrationId);
+		public delegate void UnregisteredDelegate(string providerName, string oldRegistrationId);
+		public delegate void NoAvailableProviderDelegate(Dictionary<string, PushError> pushErrors);
 
 		public static event MessageDelegate OnMessage;
 		public static event MessagesDeletedDelegate OnDeletedMessages;
@@ -49,36 +50,34 @@ namespace OnePF.OPFPush
 			{
 				_eventReceiver = new GameObject("OPFPush").AddComponent<EventReceiver>();
 
-				_eventReceiver.OnMessageAction += delegate(string message)
+				_eventReceiver.OnMessageAction += delegate(string providerName, Dictionary<string, string> data)
 				{
 					if (OnMessage != null)
-						OnMessage(message);
+						OnMessage(providerName, data);
 				};
 
-				_eventReceiver.OnDeletedMessageAction += delegate(string messagesCount)
+				_eventReceiver.OnDeletedMessageAction += delegate(string providerName, int messagesCount)
 				{
 					if (OnDeletedMessages != null)
-						OnDeletedMessages(messagesCount);
+						OnDeletedMessages(providerName, messagesCount);
 				};
 
-				_eventReceiver.OnRegisteredAction += delegate(string registrationId)
+				_eventReceiver.OnRegisteredAction += delegate(string providerName, string registrationId)
 				{
 					if (OnRegistered != null)
-					{				
-						OnRegistered(registrationId);
-					}
+						OnRegistered(providerName, registrationId);
 				};
 
-				_eventReceiver.OnUnregisteredAction += delegate(string oldRegistrationId)
+				_eventReceiver.OnUnregisteredAction += delegate(string providerName, string oldRegistrationId)
 				{
 					if (OnUnregistered != null)
-						OnUnregistered(oldRegistrationId);
+						OnUnregistered(providerName, oldRegistrationId);
 				};
 
-				_eventReceiver.OnNoAvailableProviderActon += delegate(string error)
+				_eventReceiver.OnNoAvailableProviderActon += delegate(Dictionary<string, PushError> pushErrors)
 				{
 					if (OnNoAvailableProvider != null)
-						OnNoAvailableProvider(error);
+						OnNoAvailableProvider(pushErrors);
 				};
 			}
 		}
