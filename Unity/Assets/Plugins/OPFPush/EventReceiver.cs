@@ -8,7 +8,6 @@ using Newtonsoft.Json;
 
 namespace OnePF.OPFPush
 {
-	// TODO: create only for Android
 	public class EventReceiver : MonoBehaviour
 	{
 		public event Action<string, Dictionary<string, string> > OnMessageAction;
@@ -21,48 +20,52 @@ namespace OnePF.OPFPush
 
 		void OnMessage (string messageJson)
 		{
+			Debug.Log ("OPFPush. Receive OnMessage event. json : " + messageJson);
 			if (OnMessageAction != null) {
-				Debug.Log ("OnMessage json : " + messageJson);
-				//TODO change to var
-				OnMessageData data = JsonConvert.DeserializeObject<OnMessageData> (messageJson);
+				var data = JsonConvert.DeserializeObject<OnMessageData> (messageJson);
 				OnMessageAction (data.ProviderName, data.Data);
-			}
+			} else
+				Debug.Log ("OPFPush. OnMessageAction == null");
 		}
 
 		void OnDeletedMessages (string deletedMessagesJson)
 		{
+			Debug.Log ("OPFPush. Receive OnDeletedMessages event. json : " + deletedMessagesJson);
 			if (OnDeletedMessageAction != null) {
-				Debug.Log ("OnDeletedMessages json : " + deletedMessagesJson);
-				OnDeletedMessagesData data = JsonConvert.DeserializeObject<OnDeletedMessagesData> (deletedMessagesJson);
+				var data = JsonConvert.DeserializeObject<OnDeletedMessagesData> (deletedMessagesJson);
 				OnDeletedMessageAction (data.ProviderName, data.MessagesCount);
-			}
+			} else
+				Debug.Log ("OPFPush. OnDeletedMessageAction == null");
 		}
 
 		void OnRegistered (string registeredJson)
 		{
+			Debug.Log ("OPFPush. Receive OnRegistered event. json : " + registeredJson);
 			if (OnRegisteredAction != null) {
-				Debug.Log ("OnRegistered json : " + registeredJson);
-				OnRegisteredData data = JsonConvert.DeserializeObject<OnRegisteredData> (registeredJson);
+				var data = JsonConvert.DeserializeObject<OnRegisteredData> (registeredJson);
 				OnRegisteredAction (data.ProviderName, data.RegistrationId);
-			}
+			} else 
+				Debug.Log ("OPFPush. OnRegisteredAction == null");
 		}
 
 		void OnUnregistered (string unregisteredJson)
 		{
+			Debug.Log ("OPFPush. Receive OnUnregistered event. json : " + unregisteredJson);
 			if (OnUnregisteredAction != null) {
-				Debug.Log ("OnUnregistered json : " + unregisteredJson);
-				OnUnregisteredData data = JsonConvert.DeserializeObject<OnUnregisteredData> (unregisteredJson);
+				var data = JsonConvert.DeserializeObject<OnUnregisteredData> (unregisteredJson);
 				OnUnregisteredAction (data.ProviderName, data.OldRegistrationId);
-			}
+			} else
+				Debug.Log ("OPFPush. OnUnregisteredAction == null");
 		}
 
 		void OnNoAvailableProvider (string noAvailableProviderJson)
 		{
+			Debug.Log ("OPFPush. Receive OnNoAvailableProvider event. json : " + noAvailableProviderJson);
 			if (OnNoAvailableProviderActon != null) {
-				Debug.Log ("OnNoAvailableProvider json : " + noAvailableProviderJson);
-				OnNoAvailableProviderData data = JsonConvert.DeserializeObject<OnNoAvailableProviderData> (noAvailableProviderJson);
+				var data = JsonConvert.DeserializeObject<OnNoAvailableProviderData> (noAvailableProviderJson);
 				OnNoAvailableProviderActon (data.PushErrors);
-			}
+			} else 
+				Debug.Log ("OPFPush. OnNoAvailableProviderActon == null");
 		}
 
         #endregion

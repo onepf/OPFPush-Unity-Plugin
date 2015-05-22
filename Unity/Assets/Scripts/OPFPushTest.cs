@@ -27,7 +27,7 @@ public class OPFPushTest : MonoBehaviour
 
 	void Start ()
 	{
-		OPFPush.Register ();
+		OPFPush.GetHelper ().Register ();
 	}
 
 	void OPFPush_OnMessage (string providerName, Dictionary<string, string> data)
@@ -54,6 +54,11 @@ public class OPFPushTest : MonoBehaviour
 	void OPFPush_OnRegistered (string providerName, string registrationId)
 	{
 		Debug.Log (string.Format ("OPFPush. OnRegistered(). provider : \"{0}\"; regId : \"{1}\"", providerName, registrationId));
+
+		Debug.Log (string.Format ("OPFPush. Provider name : \"{0}\"", OPFPush.GetHelper ().GetProviderName ()));
+		Debug.Log (string.Format ("OPFPush. Registration id : \"{0}\"", OPFPush.GetHelper ().GetRegistrationId ()));
+		Debug.Log (string.Format ("OPFPush. isRegistered : \"{0}\"", OPFPush.GetHelper ().IsRegistered ()));
+		Debug.Log (string.Format ("OPFPush. isRegistering : \"{0}\"", OPFPush.GetHelper ().isRegistering ()));
 	}
 
 	void OPFPush_OnUnregistered (string providerName, string oldRegistrationId)
