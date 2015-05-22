@@ -5,19 +5,19 @@ using System;
 
 namespace OnePF.OPFPush
 {
-    public class OPFPush_Android : IOPFPush
-    {
-        public void Register() 
+	public class OPFPush_Android : IOPFPush
+	{
+		public void Register ()
 		{
 			AndroidJavaClass unityHelper_class = new AndroidJavaClass ("org.onepf.opfpush.unity.UnityHelper");
-			unityHelper_class.CallStatic("register");
+			unityHelper_class.CallStatic ("register");
 		}
 
-		public void Unregister()
+		public void Unregister ()
 		{
 			AndroidJavaClass unityHelper_class = new AndroidJavaClass ("org.onepf.opfpush.unity.UnityHelper");
-			unityHelper_class.CallStatic("unregister");
+			unityHelper_class.CallStatic ("unregister");
 		}
-    }
+	}
 }
 #endif

@@ -1,9 +1,9 @@
 ﻿namespace OnePF.OPFPush
 {
-    public class ADMProvider : IPushProvider
-    {
-        public ADMProvider()
-        {
-        }
-    }
+	public class ADMProvider : IPushProvider
+	{
+		public ADMProvider ()
+		{
+		}
+	}
 }

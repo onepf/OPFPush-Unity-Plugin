@@ -8,4 +8,3 @@ namespace OnePF.OPFPush
 		public Dictionary<string, PushError> PushErrors { get; set; }
 	}
 }
-

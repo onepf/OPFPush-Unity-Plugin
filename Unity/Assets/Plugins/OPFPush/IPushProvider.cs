@@ -1,6 +1,6 @@
 ﻿namespace OnePF.OPFPush
 {
-    public interface IPushProvider
-    {
-    }
+	public interface IPushProvider
+	{
+	}
 }

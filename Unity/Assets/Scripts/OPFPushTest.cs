@@ -7,79 +7,74 @@ using System.Text;
 
 public class OPFPushTest : MonoBehaviour
 {
-    void OnEnable()
-    {
-        OPFPush.OnMessage += OPFPush_OnMessage;
+	void OnEnable ()
+	{
+		OPFPush.OnMessage += OPFPush_OnMessage;
 		OPFPush.OnDeletedMessages += OPFPush_OnDeletedMessages;
 		OPFPush.OnRegistered += OPFPush_OnRegistered;
 		OPFPush.OnUnregistered += OPFPush_OnUnregistered;
 		OPFPush.OnNoAvailableProvider += OPFPush_OnNoAvailableProvider;
-    }
+	}
 
-    void OnDisable()
-    {
+	void OnDisable ()
+	{
 		OPFPush.OnMessage -= OPFPush_OnMessage;
 		OPFPush.OnDeletedMessages -= OPFPush_OnDeletedMessages;
 		OPFPush.OnRegistered -= OPFPush_OnRegistered;
 		OPFPush.OnUnregistered -= OPFPush_OnUnregistered;
 		OPFPush.OnNoAvailableProvider -= OPFPush_OnNoAvailableProvider;
-    }
+	}
 
-    void Start()
-    {
-		OPFPush.Register ();
-    }
-
-	void OPFPush_OnMessage(string providerName, Dictionary<string, string> data)
+	void Start ()
 	{
-		StringBuilder logBuilder = new StringBuilder(string.Format ("OPFPush. OnMessage: {0}", providerName));
+		OPFPush.Register ();
+	}
 
-		if (data != null)
-		{
-			foreach(KeyValuePair<string, string> entry in data)
-			{
-				logBuilder.Append(string.Format(" key : \"{0}\"; value : \"{1}\" ", entry.Key, entry.Value));
+	void OPFPush_OnMessage (string providerName, Dictionary<string, string> data)
+	{
+		StringBuilder logBuilder = new StringBuilder (string.Format ("OPFPush. OnMessage: {0}", providerName));
+
+		if (data != null) {
+			foreach (KeyValuePair<string, string> entry in data) {
+				logBuilder.Append (string.Format (" key : \"{0}\"; value : \"{1}\" ", entry.Key, entry.Value));
 			}
-		} 
-		else 
-		{
-			logBuilder.Append(" message data == null");
+		} else {
+			logBuilder.Append (" message data == null");
 		}
 
 
-		Debug.Log (logBuilder.ToString());
+		Debug.Log (logBuilder.ToString ());
 	}
 
-	void OPFPush_OnDeletedMessages(string providerName, int messagesCount)
+	void OPFPush_OnDeletedMessages (string providerName, int messagesCount)
 	{
 		Debug.Log (string.Format ("OPFPush. OnDeletedMessages(). provider : \"{0}\"; messagesCount : {1}", providerName, messagesCount));
 	}
 
-	void OPFPush_OnRegistered(string providerName, string registrationId)
+	void OPFPush_OnRegistered (string providerName, string registrationId)
 	{
 		Debug.Log (string.Format ("OPFPush. OnRegistered(). provider : \"{0}\"; regId : \"{1}\"", providerName, registrationId));
 	}
 
-	void OPFPush_OnUnregistered(string providerName, string oldRegistrationId)
+	void OPFPush_OnUnregistered (string providerName, string oldRegistrationId)
 	{
 		Debug.Log (string.Format ("OPFPush. OnUnregistered(). provider : \"{0}\"; regId : \"{1}\"", providerName, oldRegistrationId));
 	}
 
-	void OPFPush_OnNoAvailableProvider(Dictionary<string, PushError> pushErrors)
+	void OPFPush_OnNoAvailableProvider (Dictionary<string, PushError> pushErrors)
 	{
-		var logBuilder = new StringBuilder("OPFPush. OnNoAvailableProvider()");
+		var logBuilder = new StringBuilder ("OPFPush. OnNoAvailableProvider()");
 
-		foreach(KeyValuePair<string, PushError> pushError in pushErrors)
-		{
-			logBuilder.Append(string.Format(" providerName : {0}", pushError.Key))
-				.Append(string.Format(
+		foreach (KeyValuePair<string, PushError> pushError in pushErrors) {
+			logBuilder.Append (string.Format (" providerName : {0}", pushError.Key))
+				.Append (string.Format (
 					" availabilityErrorCode : \"{0}\"; type : \"{1}\"; original error : \"{2}\"", 
 					pushError.Value.AvailabilityErrorCode,
 					pushError.Value.Type,
 					pushError.Value.OriginalError
-				));
+			));
 		}
 
-		Debug.Log (logBuilder.ToString());
+		Debug.Log (logBuilder.ToString ());
 	}
 }

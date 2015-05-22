@@ -2,7 +2,6 @@ using System;
 
 namespace OnePF.OPFPush
 {
-
 	public class OnRegisteredData
 	{
 		public string ProviderName { get; set; }
@@ -10,4 +9,3 @@ namespace OnePF.OPFPush
 		public string RegistrationId { get; set; }
 	}
 }
-

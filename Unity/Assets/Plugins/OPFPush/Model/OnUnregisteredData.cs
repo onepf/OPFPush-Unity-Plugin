@@ -9,4 +9,3 @@ namespace OnePF.OPFPush
 		public string OldRegistrationId { get; set; }
 	}
 }
-
