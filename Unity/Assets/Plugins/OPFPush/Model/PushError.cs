@@ -1,5 +1,3 @@
-using System;
-
 namespace OnePF.OPFPush
 {
 	public class PushError

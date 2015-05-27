@@ -1,15 +1,13 @@
 ﻿#if UNITY_ANDROID
 using UnityEngine;
-using System.Collections;
-using System;
 
 namespace OnePF.OPFPush
 {
-	public class OPFPushHelper_Android : IOPFPushHelper
+	public class AndroidOPFPushHelper : IOPFPushHelper
 	{
-		private AndroidJavaObject _pushHelper_object;
+		AndroidJavaObject _pushHelper_object;
 
-		public OPFPushHelper_Android ()
+		public AndroidOPFPushHelper ()
 		{
 			var opfPush_class = new AndroidJavaClass ("org.onepf.opfpush.OPFPush");
 			_pushHelper_object = opfPush_class.CallStatic<AndroidJavaObject> ("getHelper");
@@ -40,7 +38,7 @@ namespace OnePF.OPFPush
 			return _pushHelper_object.Call<bool> ("isRegistered");
 		}
 
-		public bool isRegistering ()
+		public bool IsRegistering ()
 		{
 			return _pushHelper_object.Call<bool> ("isRegistering");
 		}

@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
+using UnityEngine;
 using System.Collections.Generic;
 using OnePF.OPFPush;
-using System;
 using System.Text;
 
 public class OPFPushTest : MonoBehaviour
@@ -32,7 +30,7 @@ public class OPFPushTest : MonoBehaviour
 
 	void OPFPush_OnMessage (string providerName, Dictionary<string, string> data)
 	{
-		StringBuilder logBuilder = new StringBuilder (string.Format ("OPFPush. OnMessage: {0}", providerName));
+		var logBuilder = new StringBuilder (string.Format ("OPFPush. OnMessage: {0}", providerName));
 
 		if (data != null) {
 			foreach (KeyValuePair<string, string> entry in data) {
@@ -58,7 +56,7 @@ public class OPFPushTest : MonoBehaviour
 		Debug.Log (string.Format ("OPFPush. Provider name : \"{0}\"", OPFPush.GetHelper ().GetProviderName ()));
 		Debug.Log (string.Format ("OPFPush. Registration id : \"{0}\"", OPFPush.GetHelper ().GetRegistrationId ()));
 		Debug.Log (string.Format ("OPFPush. isRegistered : \"{0}\"", OPFPush.GetHelper ().IsRegistered ()));
-		Debug.Log (string.Format ("OPFPush. isRegistering : \"{0}\"", OPFPush.GetHelper ().isRegistering ()));
+		Debug.Log (string.Format ("OPFPush. isRegistering : \"{0}\"", OPFPush.GetHelper ().IsRegistering ()));
 	}
 
 	void OPFPush_OnUnregistered (string providerName, string oldRegistrationId)

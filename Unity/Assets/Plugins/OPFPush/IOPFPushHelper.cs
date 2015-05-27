@@ -12,6 +12,6 @@
 
 		bool IsRegistered ();
 
-		bool isRegistering ();
+		bool IsRegistering ();
 	}
 }

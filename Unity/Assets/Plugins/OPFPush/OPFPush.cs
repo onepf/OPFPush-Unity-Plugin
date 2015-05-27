@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace OnePF.OPFPush
@@ -22,13 +21,13 @@ namespace OnePF.OPFPush
 		public static event UnregisteredDelegate OnUnregistered;
 		public static event NoAvailableProviderDelegate OnNoAvailableProvider;
 
-		static IOPFPushHelper _pushHelper = null;
-		static EventReceiver _eventReceiver = null;
+		static IOPFPushHelper _pushHelper;
+		static EventReceiver _eventReceiver;
 
 		static OPFPush ()
 		{
 #if UNITY_ANDROID
-			_pushHelper = new OPFPushHelper_Android ();
+			_pushHelper = new AndroidOPFPushHelper ();
 #else
 			Debug.LogError ("OPFPush is currently not supported on this platform. Sorry.");
 			return;
@@ -43,7 +42,7 @@ namespace OnePF.OPFPush
 			return _pushHelper;
 		}
 
-		private static void initEventReceiver ()
+		static void initEventReceiver ()
 		{
 			_eventReceiver = new GameObject ("OPFPush").AddComponent<EventReceiver> ();
 
