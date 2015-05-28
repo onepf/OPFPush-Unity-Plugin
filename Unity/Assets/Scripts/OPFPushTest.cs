@@ -5,6 +5,29 @@ using System.Text;
 
 public class OPFPushTest : MonoBehaviour
 {
+	const string UNREGISTERED_STATE = "State : Unregistered";
+	const string REGISTRING_STATE = "State : Registring";
+	const string NO_AVAILABLE_PROVIDER_STATE = "State : Unregistered. No available provider";
+
+	const string REGISTER_BUTTON = "Register";
+	const string REGISTERING_BUTTON = "Registering";
+	const string UNREGISTER_BUTTON = "Unregister";
+
+	const int MESSAGE_WINDOW_HEIGHT = 500;
+
+	string stateString;
+	string buttonText;
+	bool isButtonEnabled;
+	bool isMessageWindowVisible;
+	string messageText;
+
+	GUIStyle stateTextStyle;
+	GUIStyle buttonStyle;
+	GUIStyle messageTextStyle = new GUIStyle ();
+	GUIStyle messageCloseButton = new GUIStyle ();
+
+	Rect windowRect = new Rect (20, Screen.height / 2 - MESSAGE_WINDOW_HEIGHT / 2, Screen.width - 40, MESSAGE_WINDOW_HEIGHT);
+	
 	void OnEnable ()
 	{
 		OPFPush.OnMessage += OPFPush_OnMessage;
@@ -25,7 +48,106 @@ public class OPFPushTest : MonoBehaviour
 
 	void Start ()
 	{
+		Screen.orientation = ScreenOrientation.Portrait;
+		initBackground ();
+
 		OPFPush.GetHelper ().Register ();
+		initState ();
+	}
+
+	void OnGUI ()
+	{
+		initStateTextStyle ();
+		initButtonStyle ();		
+
+		GUI.Label (new Rect (20, 20, Screen.width - 40, Screen.height), stateString, stateTextStyle);
+
+		GUI.enabled = isButtonEnabled;
+		if (GUI.Button (new Rect (20, Screen.height - 200, Screen.width - 40, 150), buttonText, buttonStyle)) {
+			var helper = OPFPush.GetHelper ();
+			if (helper.IsRegistered ()) {
+				//OPFPush is registered, need to unregister
+				isButtonEnabled = false;
+				helper.Unregister ();
+			} else if (!helper.IsRegistering ()) {
+				//OPFPush is unregistered, need to register
+				isButtonEnabled = false;
+				buttonText = REGISTERING_BUTTON;
+				helper.Register ();
+			}
+		}
+		GUI.enabled = true;
+
+		if (isMessageWindowVisible) {
+			windowRect = GUI.Window (0, windowRect, DoMessageWindow, "Message");
+		}
+	}
+
+	void DoMessageWindow (int windowID)
+	{
+		messageTextStyle.fontSize = 50;
+		messageTextStyle.wordWrap = true;
+		messageTextStyle.normal.textColor = Color.white;
+
+		GUILayout.BeginVertical ();
+		GUILayout.Label (messageText, messageTextStyle);
+		GUILayout.FlexibleSpace ();
+		if (GUILayout.Button ("Close")) {
+			print ("Got a click");
+			isMessageWindowVisible = false;
+		}
+		GUILayout.EndHorizontal ();
+	}
+	
+	void initBackground ()
+	{
+		var camera = GetComponent<Camera> ();
+		camera.clearFlags = CameraClearFlags.SolidColor;
+		camera.backgroundColor = Color.white;
+	}
+	
+	void initState ()
+	{
+		var opfpushHelper = OPFPush.GetHelper ();
+		if (opfpushHelper.IsRegistered ()) {
+			stateString = getRegisteredStateString (opfpushHelper.GetProviderName (), opfpushHelper.GetRegistrationId ());
+			buttonText = UNREGISTER_BUTTON;
+			isButtonEnabled = true;
+		} else if (opfpushHelper.IsRegistering ()) {
+			stateString = REGISTRING_STATE;
+			buttonText = REGISTERING_BUTTON;
+			isButtonEnabled = false;
+		} else {
+			stateString = UNREGISTERED_STATE;
+			buttonText = REGISTER_BUTTON;
+			isButtonEnabled = true;
+		}
+	}
+
+	void initStateTextStyle ()
+	{
+		if (stateTextStyle == null) {
+			stateTextStyle = new GUIStyle ();
+			stateTextStyle.fontSize = 50;
+			stateTextStyle.wordWrap = true;
+		}		
+	}
+
+	void initButtonStyle ()
+	{
+		if (buttonStyle == null) {
+			buttonStyle = GUI.skin.GetStyle ("Button");
+			buttonStyle.fontSize = 50;
+		}
+	}
+
+	string getRegisteredStateString (string providerName, string registrationId)
+	{
+		return string.Format (
+			"State : Registered. \n Provider name : \"{0}\"; \n Registration id : \"{1}\"",
+			providerName,
+			registrationId
+		);
 	}
 
 	void OPFPush_OnMessage (string providerName, Dictionary<string, string> data)
@@ -42,6 +164,9 @@ public class OPFPushTest : MonoBehaviour
 
 
 		Debug.Log (logBuilder.ToString ());
+
+		messageText = data ["message"];
+		isMessageWindowVisible = true;
 	}
 
 	void OPFPush_OnDeletedMessages (string providerName, int messagesCount)
@@ -53,15 +178,18 @@ public class OPFPushTest : MonoBehaviour
 	{
 		Debug.Log (string.Format ("OPFPush. OnRegistered(). provider : \"{0}\"; regId : \"{1}\"", providerName, registrationId));
 
-		Debug.Log (string.Format ("OPFPush. Provider name : \"{0}\"", OPFPush.GetHelper ().GetProviderName ()));
-		Debug.Log (string.Format ("OPFPush. Registration id : \"{0}\"", OPFPush.GetHelper ().GetRegistrationId ()));
-		Debug.Log (string.Format ("OPFPush. isRegistered : \"{0}\"", OPFPush.GetHelper ().IsRegistered ()));
-		Debug.Log (string.Format ("OPFPush. isRegistering : \"{0}\"", OPFPush.GetHelper ().IsRegistering ()));
+		stateString = getRegisteredStateString (providerName, registrationId);
+		buttonText = UNREGISTER_BUTTON;
+		isButtonEnabled = true;
 	}
 
 	void OPFPush_OnUnregistered (string providerName, string oldRegistrationId)
 	{
 		Debug.Log (string.Format ("OPFPush. OnUnregistered(). provider : \"{0}\"; regId : \"{1}\"", providerName, oldRegistrationId));
+
+		stateString = UNREGISTERED_STATE;
+		buttonText = REGISTER_BUTTON;
+		isButtonEnabled = true;
 	}
 
 	void OPFPush_OnNoAvailableProvider (Dictionary<string, PushError> pushErrors)
@@ -79,5 +207,9 @@ public class OPFPushTest : MonoBehaviour
 		}
 
 		Debug.Log (logBuilder.ToString ());
+
+		stateString = NO_AVAILABLE_PROVIDER_STATE;
+		buttonText = REGISTER_BUTTON;
+		isButtonEnabled = true;
 	}
 }

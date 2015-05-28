@@ -1,35 +1,26 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" ActiveRuntime="Mono 3.10.0" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Plugins/Android/AndroidManifest.xml">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" ActiveRuntime="Mono 3.10.0" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/OPFPushTest.cs">
     <Files>
-      <File FileName="Assets/Plugins/OPFPush/Model/OnRegisteredData.cs" Line="12" Column="1" />
-      <File FileName="Assets/Plugins/OPFPush/EventReceiver.cs" Line="1" Column="19" />
-      <File FileName="Assets/Plugins/OPFPush/OPFPush.cs" Line="1" Column="19" />
-      <File FileName="Assets/Plugins/OPFPush/Model/OnUnregisteredData.cs" Line="11" Column="2" />
-      <File FileName="Assets/Scripts/OPFPushTest.cs" Line="1" Column="19" />
-      <File FileName="Assets/Plugins/OPFPush/Model/OnDeletedMessagesData.cs" Line="12" Column="1" />
-      <File FileName="Assets/Plugins/OPFPush/Model/OnMessageData.cs" Line="9" Column="3" />
-      <File FileName="Assets/Plugins/OPFPush/Model/OnNoAvailableProviderData.cs" Line="6" Column="15" />
-      <File FileName="Assets/Plugins/OPFPush/OPFPushHelper_Android.cs" Line="34" Column="4" />
-      <File FileName="Assets/Plugins/OPFPush/Model/PushError.cs" Line="12" Column="1" />
-      <File FileName="Assets/Plugins/OPFPush/IOPFPushHelper.cs" Line="9" Column="3" />
-      <File FileName="Assets/Plugins/Android/assets/opfpush_config.json" Line="10" Column="2" />
-      <File FileName="Assets/Plugins/Android/AndroidManifest.xml" Line="139" Column="58" />
+      <File FileName="Assets/Plugins/OPFPush/Model/OnDeletedMessagesData.cs" Line="1" Column="1" />
+      <File FileName="Assets/Plugins/OPFPush/Model/OnMessageData.cs" Line="8" Column="3" />
+      <File FileName="Assets/Plugins/OPFPush/Model/OnNoAvailableProviderData.cs" Line="1" Column="1" />
+      <File FileName="Assets/Plugins/OPFPush/Model/OnRegisteredData.cs" Line="6" Column="3" />
+      <File FileName="Assets/Plugins/OPFPush/Model/OnUnregisteredData.cs" Line="1" Column="1" />
+      <File FileName="Assets/Plugins/OPFPush/Model/PushError.cs" Line="1" Column="1" />
+      <File FileName="Assets/Plugins/OPFPush/EventReceiver.cs" Line="3" Column="14" />
+      <File FileName="Assets/Plugins/OPFPush/IOPFPushHelper.cs" Line="1" Column="1" />
+      <File FileName="Assets/Plugins/OPFPush/OPFPush.cs" Line="45" Column="3" />
+      <File FileName="Assets/Plugins/OPFPush/AndroidOPFPushHelper.cs" Line="41" Column="28" />
+      <File FileName="Assets/Scripts/OPFPushTest.cs" Line="51" Column="44" />
+      <File FileName="Assets/Plugins/Android/AndroidManifest.xml" Line="54" Column="44" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Assembly-CSharp" expanded="True">
-            <Node name="Scripts" expanded="True" />
-          </Node>
-          <Node name="Assembly-CSharp-firstpass" expanded="True">
-            <Node name="Plugins" expanded="True">
-              <Node name="Android" expanded="True">
-                <Node name="AndroidManifest.xml" selected="True" />
-              </Node>
-              <Node name="OPFPush" expanded="True">
-                <Node name="Model" expanded="True" />
-              </Node>
+            <Node name="Scripts" expanded="True">
+              <Node name="OPFPushTest.cs" selected="True" />
             </Node>
           </Node>
         </State>
