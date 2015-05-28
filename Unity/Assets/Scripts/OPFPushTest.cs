@@ -13,8 +13,6 @@ public class OPFPushTest : MonoBehaviour
 	const string REGISTERING_BUTTON = "Registering";
 	const string UNREGISTER_BUTTON = "Unregister";
 
-	const int MESSAGE_WINDOW_HEIGHT = 500;
-
 	string stateString;
 	string buttonText;
 	bool isButtonEnabled;
@@ -24,9 +22,8 @@ public class OPFPushTest : MonoBehaviour
 	GUIStyle stateTextStyle;
 	GUIStyle buttonStyle;
 	GUIStyle messageTextStyle = new GUIStyle ();
-	GUIStyle messageCloseButton = new GUIStyle ();
 
-	Rect windowRect = new Rect (20, Screen.height / 2 - MESSAGE_WINDOW_HEIGHT / 2, Screen.width - 40, MESSAGE_WINDOW_HEIGHT);
+	Rect windowRect = new Rect (20, 0.5f * Screen.height - 0.25f * Screen.height, Screen.width - 40, 0.5f * Screen.height);
 	
 	void OnEnable ()
 	{
@@ -55,6 +52,13 @@ public class OPFPushTest : MonoBehaviour
 		initState ();
 	}
 
+	void Update ()
+	{
+		if (Input.GetKeyDown (KeyCode.Escape)) {
+			Application.Quit (); 
+		}
+	}
+
 	void OnGUI ()
 	{
 		initStateTextStyle ();
@@ -63,7 +67,7 @@ public class OPFPushTest : MonoBehaviour
 		GUI.Label (new Rect (20, 20, Screen.width - 40, Screen.height), stateString, stateTextStyle);
 
 		GUI.enabled = isButtonEnabled;
-		if (GUI.Button (new Rect (20, Screen.height - 200, Screen.width - 40, 150), buttonText, buttonStyle)) {
+		if (GUI.Button (new Rect (20, Screen.height - 0.1f * Screen.height - 40, Screen.width - 40, 0.1f * Screen.height), buttonText, buttonStyle)) {
 			var helper = OPFPush.GetHelper ();
 			if (helper.IsRegistered ()) {
 				//OPFPush is registered, need to unregister
@@ -85,7 +89,7 @@ public class OPFPushTest : MonoBehaviour
 
 	void DoMessageWindow (int windowID)
 	{
-		messageTextStyle.fontSize = 50;
+		messageTextStyle.fontSize = (int)(0.03f * Screen.height);
 		messageTextStyle.wordWrap = true;
 		messageTextStyle.normal.textColor = Color.white;
 
@@ -128,7 +132,7 @@ public class OPFPushTest : MonoBehaviour
 	{
 		if (stateTextStyle == null) {
 			stateTextStyle = new GUIStyle ();
-			stateTextStyle.fontSize = 50;
+			stateTextStyle.fontSize = (int)(0.03f * Screen.height);
 			stateTextStyle.wordWrap = true;
 		}		
 	}
@@ -137,7 +141,7 @@ public class OPFPushTest : MonoBehaviour
 	{
 		if (buttonStyle == null) {
 			buttonStyle = GUI.skin.GetStyle ("Button");
-			buttonStyle.fontSize = 50;
+			buttonStyle.fontSize = (int)(0.03f * Screen.height);
 		}
 	}
 

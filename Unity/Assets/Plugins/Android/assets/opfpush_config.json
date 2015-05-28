@@ -4,7 +4,7 @@
    "providers":[
    		{"name":"GCM", "senderId":"707033278505"}, 
    		{"name":"ADM"}, 
-   		{"name":"Nokia", "senderIdsArray":["pushsample", "pushsample2"]}
+   		{"name":"Nokia", "senderIdsArray":["pushsample"]}
    	],
    "selectSystemPreferred":true
 }
