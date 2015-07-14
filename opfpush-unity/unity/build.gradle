@@ -1,0 +1,49 @@
+def sep = File.separator
+def unityRootAbsolutePath = "${rootProject.projectDir.absolutePath}${sep}opfpush-unity${sep}unity"
+def unityPackageAbsolutePath = "${project.buildDir.absolutePath}${sep}outputs"
+
+task(clean) << {
+    project.buildDir.deleteDir()
+    //delete fileTree(dir: "${project.buildDir.absolutePath}", include: '**/*')
+}
+
+task(build) << {
+    final def unityPath = getUnityExecutablePath()
+    delete fileTree(dir: unityPackageAbsolutePath , include: '*.unitypackage')
+    mkdir unityPackageAbsolutePath
+
+    println "Unity executable: $unityPath"
+    println "Unity package source root: $unityRootAbsolutePath"
+    println "Unity package build: $unityPackageAbsolutePath"
+
+    project.exec {
+        commandLine unityPath
+        args '-batchmode'
+        args '-projectPath'
+        args "${unityRootAbsolutePath}"
+        args '-exportPackage'
+        args "Assets${sep}Plugins"
+        args "${unityPackageAbsolutePath}${sep}OPFPush-plugin.unitypackage"
+        args '-logFile'
+        args "${unityPackageAbsolutePath}${sep}unity-plugin-build.log"
+        args '-quit'
+    }
+
+    println "Build log: ${unityPackageAbsolutePath}${sep}unity-plugin-build.log"
+}
+
+def getUnityExecutablePath() {
+    if (project.hasProperty('unityExecutable')) {
+        return project.property('unityExecutable');
+    } else {
+        def paths = ['unityMacPath', 'unityWin86Path', 'unityWin64Path',]
+        for (path in paths) {
+            if (file(project.property(path)).exists()) {
+                return project.property(path);
+            }
+        }
+    }
+
+    throw new RuntimeException("Unity not found. Please make sure Unity " +
+            "is installed at default location or provide 'unityExecutable' property.");
+}

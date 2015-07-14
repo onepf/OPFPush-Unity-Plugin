@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
-include ':opfpush-android'
+include ':android',
+        ':unity'
 
-project(':opfpush-android').projectDir = new File('opfpush-unity/android')
+project(':android').projectDir = new File('opfpush-unity/android')
+project(':unity').projectDir = new File('opfpush-unity/unity')
