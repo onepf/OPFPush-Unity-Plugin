@@ -1,35 +1,95 @@
-def sep = File.separator
-def unityRootAbsolutePath = "${rootProject.projectDir.absolutePath}${sep}opfpush-unity${sep}unity"
-def unityPackageAbsolutePath = "${project.buildDir.absolutePath}${sep}outputs"
+apply plugin: 'java'
 
-task(clean) << {
-    project.buildDir.deleteDir()
-    //delete fileTree(dir: "${project.buildDir.absolutePath}", include: '**/*')
+dependencies {
+    runtime('org.onepf:opfutils:0.1.23') {
+        transitive false
+    }
+    runtime('org.onepf:opfpush:0.3.0') {
+        transitive false
+    }
+    runtime('org.onepf:opfpush-gcm:0.3.0') {
+        transitive false
+    }
+    runtime('org.onepf:opfpush-adm:0.3.0') {
+        transitive false
+    }
+    runtime('org.onepf:opfpush-nokia:0.3.0') {
+        transitive false
+    }
+    runtime('com.nokia:push:1.0') {
+        transitive false
+    }
 }
 
-task(build) << {
-    final def unityPath = getUnityExecutablePath()
-    delete fileTree(dir: unityPackageAbsolutePath , include: '*.unitypackage')
-    mkdir unityPackageAbsolutePath
+// Build unity package
+def sep = File.separator
+def unityRootAbsolutePath = "${rootProject.projectDir.absolutePath}${sep}opfpush-unity${sep}unity"
+def unitySrcPath = "${unityRootAbsolutePath}${sep}Assets${sep}Plugins${sep}Android"
 
-    println "Unity executable: $unityPath"
-    println "Unity package source root: $unityRootAbsolutePath"
-    println "Unity package build: $unityPackageAbsolutePath"
+clean {
+    doLast {
+        project.buildDir.deleteDir()
 
-    project.exec {
-        commandLine unityPath
-        args '-batchmode'
-        args '-projectPath'
-        args "${unityRootAbsolutePath}"
-        args '-exportPackage'
-        args "Assets${sep}Plugins"
-        args "${unityPackageAbsolutePath}${sep}OPFPush-plugin.unitypackage"
-        args '-logFile'
-        args "${unityPackageAbsolutePath}${sep}unity-plugin-build.log"
-        args '-quit'
+        //delete old dependencies
+        def unitySrcDir = new File(unitySrcPath);
+        //delete jars
+        unitySrcDir.eachFileMatch(~ /((?!android-support-v4.jar|google-play-services.jar).).*.jar/) { file ->
+            println file
+            file.delete()
+        }
+        //delete meta
+        unitySrcDir.eachFileMatch(~ /.*.meta/) { file ->
+            file.delete()
+        }
     }
+}
 
-    println "Build log: ${unityPackageAbsolutePath}${sep}unity-plugin-build.log"
+build {
+    doLast {
+        def unityPackageAbsolutePath = "${project.buildDir.absolutePath}${sep}outputs"
+        def opfpushUnityJarPath = "${rootProject.projectDir.absolutePath}${sep}opfpush-unity${sep}android${sep}build${sep}intermediates${sep}bundles${sep}release${sep}classes.jar"
+        def unityPath = getUnityExecutablePath()
+        delete fileTree(dir: unityPackageAbsolutePath, include: '*.unitypackage')
+        mkdir unityPackageAbsolutePath
+
+        //get dependencies jars
+        configurations.runtime.resolve().each {
+            println it
+            def dependency = it
+            copy {
+                from dependency.getParent()
+                into unitySrcPath
+                include dependency.getName()
+            }
+        }
+
+        //get opfpush-unity.jar
+        copy {
+            from opfpushUnityJarPath
+            into unitySrcPath
+        }
+        new File("${unitySrcPath}${sep}classes.jar").renameTo "${unitySrcPath}${sep}opfpush-unity-${VERSION_NAME}.jar"
+
+
+        println "Unity executable: $unityPath"
+        println "Unity package source root: $unityRootAbsolutePath"
+        println "Unity package build: $unityPackageAbsolutePath"
+
+        project.exec {
+            commandLine unityPath
+            args '-batchmode'
+            args '-projectPath'
+            args "${unityRootAbsolutePath}"
+            args '-exportPackage'
+            args "Assets${sep}Plugins"
+            args "${unityPackageAbsolutePath}${sep}OPFPush-plugin.unitypackage"
+            args '-logFile'
+            args "${unityPackageAbsolutePath}${sep}unity-plugin-build.log"
+            args '-quit'
+        }
+
+        println "Build log: ${unityPackageAbsolutePath}${sep}unity-plugin-build.log"
+    }
 }
 
 def getUnityExecutablePath() {

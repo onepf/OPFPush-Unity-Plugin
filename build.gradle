@@ -39,6 +39,12 @@ allprojects {
 
     repositories {
         jcenter()
+        //Simplify maven upload
+        maven { url 'https://oss.sonatype.org/content/repositories/releases/' }
+        //Allow snapshots
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        //Third-party dependencies
+        maven { url 'https://raw.githubusercontent.com/onepf/OPF-mvn-repo/master/' }
     }
 
     ext {
