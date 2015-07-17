@@ -1,6 +1,10 @@
 apply plugin: 'java'
 
 dependencies {
+    runtime(project(':android')) {
+        transitive = false
+    }
+
     runtime('org.onepf:opfutils:0.1.23') {
         transitive false
     }
@@ -31,14 +35,8 @@ clean {
         project.buildDir.deleteDir()
 
         //delete old dependencies
-        def unitySrcDir = new File(unitySrcPath);
-        //delete jars
-        unitySrcDir.eachFileMatch(~ /((?!android-support-v4.jar|google-play-services.jar).).*.jar/) { file ->
-            println file
-            file.delete()
-        }
-        //delete meta
-        unitySrcDir.eachFileMatch(~ /.*.meta/) { file ->
+        file(unitySrcPath).eachFileMatch(~/(((?!android-support-v4.jar|google-play-services.jar).).*.jar)|(.*.meta)|(.*.aar)/) { file ->
+            println 'delete ' + file
             file.delete()
         }
     }
@@ -47,7 +45,6 @@ clean {
 build {
     doLast {
         def unityPackageAbsolutePath = "${project.buildDir.absolutePath}${sep}outputs"
-        def opfpushUnityJarPath = "${rootProject.projectDir.absolutePath}${sep}opfpush-unity${sep}android${sep}build${sep}intermediates${sep}bundles${sep}release${sep}classes.jar"
         def unityPath = getUnityExecutablePath()
         delete fileTree(dir: unityPackageAbsolutePath, include: '*.unitypackage')
         mkdir unityPackageAbsolutePath
@@ -64,12 +61,23 @@ build {
         }
 
         //get opfpush-unity.jar
-        copy {
-            from opfpushUnityJarPath
-            into unitySrcPath
-        }
-        new File("${unitySrcPath}${sep}classes.jar").renameTo "${unitySrcPath}${sep}opfpush-unity-${VERSION_NAME}.jar"
+        def tmpDirPath = "${unitySrcPath}${sep}tmp"
 
+        //move android project archive to tmp dir for unzip
+        mkdir tmpDirPath
+        file("${unitySrcPath}${sep}android-release.aar").renameTo(file("${tmpDirPath}${sep}android-release.zip"))
+        ant.unzip(src: "${tmpDirPath}${sep}android-release.zip", dest: tmpDirPath)
+
+        //copy classes.jar to Android src dir with renaming
+        copy {
+            from tmpDirPath
+            into unitySrcPath
+            include 'classes.jar'
+        }
+        file("${unitySrcPath}${sep}classes.jar").renameTo "${unitySrcPath}${sep}opfpush-unity-${VERSION_NAME}.jar"
+
+        //Remove tmp dir
+        file(tmpDirPath).deleteDir()
 
         println "Unity executable: $unityPath"
         println "Unity package source root: $unityRootAbsolutePath"
@@ -82,7 +90,7 @@ build {
             args "${unityRootAbsolutePath}"
             args '-exportPackage'
             args "Assets${sep}Plugins"
-            args "${unityPackageAbsolutePath}${sep}OPFPush-plugin.unitypackage"
+            args "${unityPackageAbsolutePath}${sep}opfpush-${VERSION_NAME}.unitypackage"
             args '-logFile'
             args "${unityPackageAbsolutePath}${sep}unity-plugin-build.log"
             args '-quit'
