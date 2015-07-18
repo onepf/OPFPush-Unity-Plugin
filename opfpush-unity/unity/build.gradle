@@ -27,15 +27,17 @@ dependencies {
 
 // Build unity package
 def sep = File.separator
-def unityRootAbsolutePath = "${rootProject.projectDir.absolutePath}${sep}opfpush-unity${sep}unity"
-def unitySrcPath = "${unityRootAbsolutePath}${sep}Assets${sep}Plugins${sep}Android"
+def unitySrcPath = "${rootProject.projectDir.absolutePath}${sep}opfpush-unity${sep}unity${sep}Assets${sep}Plugins${sep}Android"
+def manifestPath = "${project.projectDir.absolutePath}${sep}Assets${sep}Manifests"
+def allProvidersManifestName = "AllProvidersAndroidManifest.xml"
+def withoutNokiaManifestName = "WithoutNokiaAndroidManifest.xml"
 
 clean {
     doLast {
         project.buildDir.deleteDir()
 
         //delete old dependencies
-        file(unitySrcPath).eachFileMatch(~/(((?!android-support-v4.jar|google-play-services.jar).).*.jar)|(.*.meta)|(.*.aar)/) { file ->
+        file(unitySrcPath).eachFileMatch(~/((?!android-support-v4.jar|google-play-services.jar).).*/) { file ->
             println 'delete ' + file
             file.delete()
         }
@@ -45,12 +47,14 @@ clean {
 build {
     doLast {
         def unityPackageAbsolutePath = "${project.buildDir.absolutePath}${sep}outputs"
-        def unityPath = getUnityExecutablePath()
         delete fileTree(dir: unityPackageAbsolutePath, include: '*.unitypackage')
         mkdir unityPackageAbsolutePath
 
-        //get dependencies jars
-        configurations.runtime.resolve().each {
+        def nokiaDependenciesPattern = ~/(push-1.0.jar)|(.*nokia.*)/
+        //get dependencies jars without nokia dependencies
+        configurations.runtime.resolve()
+                .findAll { file -> !file.getName().matches(nokiaDependenciesPattern) }
+                .each {
             println it
             def dependency = it
             copy {
@@ -79,22 +83,44 @@ build {
         //Remove tmp dir
         file(tmpDirPath).deleteDir()
 
-        println "Unity executable: $unityPath"
-        println "Unity package source root: $unityRootAbsolutePath"
         println "Unity package build: $unityPackageAbsolutePath"
 
-        project.exec {
-            commandLine unityPath
-            args '-batchmode'
-            args '-projectPath'
-            args "${unityRootAbsolutePath}"
-            args '-exportPackage'
-            args "Assets${sep}Plugins"
-            args "${unityPackageAbsolutePath}${sep}opfpush-${VERSION_NAME}.unitypackage"
-            args '-logFile'
-            args "${unityPackageAbsolutePath}${sep}unity-plugin-build.log"
-            args '-quit'
+        //copy android manifest without nokia pushes.
+        copy {
+            from manifestPath
+            into unitySrcPath
+            include withoutNokiaManifestName
         }
+        file("${unitySrcPath}${sep}${withoutNokiaManifestName}").renameTo "${unitySrcPath}${sep}AndroidManifest.xml"
+
+        //Build unitypackage without nokia provider
+        buildUnityPackage("${unityPackageAbsolutePath}${sep}opfpush-gcm-adm-${VERSION_NAME}.unitypackage", unityPackageAbsolutePath)
+        file("${unitySrcPath}${sep}AndroidManifest.xml").delete()
+
+        //get nokia dependencies jars
+        configurations.runtime.resolve()
+                .findAll { file -> file.getName().matches(nokiaDependenciesPattern) }
+                .each {
+            println it
+            def dependency = it
+            copy {
+                from dependency.getParent()
+                into unitySrcPath
+                include dependency.getName()
+            }
+        }
+        file("${unitySrcPath}${sep}push-1.0.jar").renameTo "${unitySrcPath}${sep}nokia-push-1.0.jar"
+
+        //copy android manifest with all providers
+        copy {
+            from manifestPath
+            into unitySrcPath
+            include allProvidersManifestName
+        }
+        file("${unitySrcPath}${sep}${allProvidersManifestName}").renameTo "${unitySrcPath}${sep}AndroidManifest.xml"
+
+        //Build unitypackage with all providers
+        buildUnityPackage("${unityPackageAbsolutePath}${sep}opfpush-all-${VERSION_NAME}.unitypackage", unityPackageAbsolutePath)
 
         println "Build log: ${unityPackageAbsolutePath}${sep}unity-plugin-build.log"
     }
@@ -114,4 +140,25 @@ def getUnityExecutablePath() {
 
     throw new RuntimeException("Unity not found. Please make sure Unity " +
             "is installed at default location or provide 'unityExecutable' property.");
+}
+
+def buildUnityPackage(packageName, unityPackageAbsolutePath) {
+    def sep = File.separator
+    def unityPath = getUnityExecutablePath()
+    def unityRootAbsolutePath = "${rootProject.projectDir.absolutePath}${sep}opfpush-unity${sep}unity"
+    println "Unity executable: $unityPath"
+    println "Unity package source root: $unityRootAbsolutePath"
+
+    project.exec {
+        commandLine unityPath
+        args '-batchmode'
+        args '-projectPath'
+        args "${unityRootAbsolutePath}"
+        args '-exportPackage'
+        args "Assets${sep}Plugins"
+        args packageName
+        args '-logFile'
+        args "${unityPackageAbsolutePath}${sep}unity-plugin-build.log"
+        args '-quit'
+    }
 }

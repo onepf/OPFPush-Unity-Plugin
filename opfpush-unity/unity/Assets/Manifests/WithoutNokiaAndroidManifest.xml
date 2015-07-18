@@ -33,9 +33,6 @@
             android:name="org.onepf.opfpush.pushsample.permission.C2D_MESSAGE"
             android:protectionLevel="signature" />
 
-    <!--nokia-->
-    <uses-permission android:name="com.nokia.pushnotifications.permission.RECEIVE" />
-
     <!---opfpush-->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -119,24 +116,6 @@
 
         <service
                 android:name="org.onepf.opfpush.gcm.SendMessageService"
-                android:exported="false" />
-
-        <!--nokia-->
-        <receiver
-                android:name="org.onepf.opfpush.nokia.NokiaNotificationsReceiver"
-                android:permission="com.nokia.pushnotifications.permission.SEND">
-            <intent-filter>
-                <!-- Receives the actual messages. -->
-                <action android:name="com.nokia.pushnotifications.intent.RECEIVE" />
-                <!-- Receives the registration id. -->
-                <action android:name="com.nokia.pushnotifications.intent.REGISTRATION" />
-
-                <category android:name="org.onepf.opfpush.pushsample" />
-            </intent-filter>
-        </receiver>
-
-        <service
-                android:name="org.onepf.opfpush.nokia.NokiaNotificationService"
                 android:exported="false" />
 
         <!--opfpush-->
