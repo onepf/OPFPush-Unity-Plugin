@@ -16,6 +16,9 @@ namespace OnePF.OPFPush
 		public void Register ()
 		{
 			_pushHelper_object.Call ("register");
+
+			var messageDeliveryController_class = new AndroidJavaClass("org.onepf.opfpush.unity.utils.MessagesDeliveryController");
+			messageDeliveryController_class.CallStatic ("resendUndeliveredMessages");
 		}
 
 		public void Unregister ()

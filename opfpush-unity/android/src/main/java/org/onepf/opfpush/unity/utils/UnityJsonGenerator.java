@@ -49,7 +49,7 @@ public final class UnityJsonGenerator {
         throw new UnsupportedOperationException();
     }
 
-    @Nullable
+    @NonNull
     public static String getOnRegisteredJson(@NonNull final String providerName,
                                              @NonNull final String registrationId) throws IOException {
         final StringWriter writer = new StringWriter();

@@ -20,9 +20,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import com.unity3d.player.UnityPlayer;
 import org.onepf.opfpush.listener.EventListener;
 import org.onepf.opfpush.model.UnrecoverablePushError;
+import org.onepf.opfpush.unity.utils.MessagesDeliveryController;
 import org.onepf.opfpush.unity.utils.UnityJsonGenerator;
 import org.onepf.opfutils.OPFLog;
 import org.onepf.opfutils.OPFUtils;
@@ -36,7 +36,6 @@ import java.util.Map;
  */
 public class PushEventListener implements EventListener {
 
-    private static final String EVENT_RECEIVER = "OPFPush";
     private static final String MESSAGE_CALLBACK = "OnMessage";
     private static final String DELETED_MESSAGES_CALLBACK = "OnDeletedMessages";
     private static final String REGISTERED_CALLBACK = "OnRegistered";
@@ -49,7 +48,7 @@ public class PushEventListener implements EventListener {
                           @Nullable final Bundle extras) {
         OPFLog.logMethod(context, providerName, OPFUtils.toString(extras));
         try {
-            UnityPlayer.UnitySendMessage(EVENT_RECEIVER, MESSAGE_CALLBACK,
+            MessagesDeliveryController.sendUnityMessage(context, MESSAGE_CALLBACK,
                     UnityJsonGenerator.getOnMessageJson(providerName, extras));
         } catch (IOException e) {
             OPFLog.e(e.getMessage());
@@ -62,7 +61,7 @@ public class PushEventListener implements EventListener {
                                   final int messagesCount) {
         OPFLog.logMethod(providerName, messagesCount);
         try {
-            UnityPlayer.UnitySendMessage(EVENT_RECEIVER, DELETED_MESSAGES_CALLBACK,
+            MessagesDeliveryController.sendUnityMessage(context, DELETED_MESSAGES_CALLBACK,
                     UnityJsonGenerator.getOnDeletedJson(providerName, messagesCount));
         } catch (IOException e) {
             OPFLog.e(e.getMessage());
@@ -75,7 +74,7 @@ public class PushEventListener implements EventListener {
                              @NonNull final String registrationId) {
         OPFLog.logMethod(providerName, registrationId);
         try {
-            UnityPlayer.UnitySendMessage(EVENT_RECEIVER, REGISTERED_CALLBACK,
+            MessagesDeliveryController.sendUnityMessage(context, REGISTERED_CALLBACK,
                     UnityJsonGenerator.getOnRegisteredJson(providerName, registrationId));
         } catch (IOException e) {
             OPFLog.e(e.getMessage());
@@ -88,7 +87,7 @@ public class PushEventListener implements EventListener {
                                @Nullable final String oldRegistrationId) {
         OPFLog.logMethod(providerName, oldRegistrationId);
         try {
-            UnityPlayer.UnitySendMessage(EVENT_RECEIVER, UNREGISTERED_CALLBACK,
+            MessagesDeliveryController.sendUnityMessage(context, UNREGISTERED_CALLBACK,
                     UnityJsonGenerator.getOnUnregisteredJson(providerName, oldRegistrationId));
         } catch (IOException e) {
             OPFLog.e(e.getMessage());
@@ -100,7 +99,7 @@ public class PushEventListener implements EventListener {
                                       @NonNull final Map<String, UnrecoverablePushError> pushErrors) {
         OPFLog.logMethod(context, pushErrors);
         try {
-            UnityPlayer.UnitySendMessage(EVENT_RECEIVER, NO_AVAILABLE_PROVIDER_CALLBACK,
+            MessagesDeliveryController.sendUnityMessage(context, NO_AVAILABLE_PROVIDER_CALLBACK,
                     UnityJsonGenerator.getOnNoAvailableProviderJson(pushErrors));
         } catch (IOException e) {
             OPFLog.e(e.getMessage());
