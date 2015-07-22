@@ -6,7 +6,7 @@ Currently it supports only android push messages.
 [opfpush-all.unitypackage](https://github.com/onepf/OPFPush-Unity-Plugin/releases/download/v0.3.1/opfpush-all-0.3.1.unitypackage) contains all supported push providers (GCM, ADM and Nokia Push)
 [opfpush-gcm-adm.unitypackage](https://github.com/onepf/OPFPush-Unity-Plugin/releases/download/v0.3.1/opfpush-gcm-adm-0.3.1.unitypackage) doesn't contain Nokia Push provider.
 
-The latest unity packages avaliable [here]https://github.com/onepf/OPFPush-Unity-Plugin/releases)
+The latest unity packages avaliable [here](https://github.com/onepf/OPFPush-Unity-Plugin/releases)
 
 How to use
 -----
