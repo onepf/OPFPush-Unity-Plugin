@@ -34,5 +34,5 @@ dependencies {
 
     //opfpush
     compile 'org.onepf:opfutils:0.1.24'
-    compile 'org.onepf:opfpush:0.3.0@aar'
+    compile 'org.onepf:opfpush:0.3.1@aar'
 }

@@ -8,16 +8,16 @@ dependencies {
     runtime('org.onepf:opfutils:0.1.24') {
         transitive false
     }
-    runtime('org.onepf:opfpush:0.3.0') {
+    runtime('org.onepf:opfpush:0.3.1') {
         transitive false
     }
-    runtime('org.onepf:opfpush-gcm:0.3.0') {
+    runtime('org.onepf:opfpush-gcm:0.3.1') {
         transitive false
     }
-    runtime('org.onepf:opfpush-adm:0.3.0') {
+    runtime('org.onepf:opfpush-adm:0.3.1') {
         transitive false
     }
-    runtime('org.onepf:opfpush-nokia:0.3.0') {
+    runtime('org.onepf:opfpush-nokia:0.3.1') {
         transitive false
     }
     runtime('com.nokia:push:1.0') {
