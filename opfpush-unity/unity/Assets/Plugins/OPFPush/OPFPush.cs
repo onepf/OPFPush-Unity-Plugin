@@ -68,10 +68,12 @@ namespace OnePF.OPFPush
 
 		static OPFPush ()
 		{
-#if UNITY_ANDROID
+
+#if UNITY_ANDROID && !UNITY_EDITOR
 			_pushHelper = new AndroidOPFPushHelper ();
 #else
-			Debug.LogError ("OPFPush is currently not supported on this platform. Sorry.");
+			_pushHelper = new StubOPFPushHelper ();
+			Debug.Log ("OPFPush is currently not supported on this platform. Sorry.");
 			return;
 #endif
 		}
