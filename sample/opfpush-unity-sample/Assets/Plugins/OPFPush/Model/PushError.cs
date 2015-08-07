@@ -7,5 +7,11 @@ namespace OnePF.OPFPush
 		public string Type { get; set; }
 
 		public string OriginalError { get; set; }
+
+		public PushError(string availabilityErrorCode, string type, string originalError) {
+			this.AvailabilityErrorCode = availabilityErrorCode;
+			this.Type = type;
+			this.OriginalError = originalError;
+		}
 	}
 }
