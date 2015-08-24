@@ -3,8 +3,8 @@ OPFPush Unity Plugin
 
 Unity plugin for [OPFPush](https://github.com/onepf/OPFPush) library.
 Currently it supports only android push messages.
-[opfpush-all.unitypackage](https://github.com/onepf/OPFPush-Unity-Plugin/releases/download/v0.3.1.1/opfpush-all-0.3.1.1.unitypackage) contains all supported push providers (GCM, ADM and Nokia Push)
-[opfpush-gcm-adm.unitypackage](https://github.com/onepf/OPFPush-Unity-Plugin/releases/download/v0.3.1.1/opfpush-gcm-adm-0.3.1.1.unitypackage) doesn't contain Nokia Push provider.
+[opfpush-all.unitypackage](https://github.com/onepf/OPFPush-Unity-Plugin/releases/download/v0.3.1.2/opfpush-all-0.3.1.2.unitypackage) contains all supported push providers (GCM, ADM and Nokia Push)
+[opfpush-gcm-adm.unitypackage](https://github.com/onepf/OPFPush-Unity-Plugin/releases/download/v0.3.1.2/opfpush-gcm-adm-0.3.1.2.unitypackage) doesn't contain Nokia Push provider.
 
 The latest unity packages avaliable [here](https://github.com/onepf/OPFPush-Unity-Plugin/releases)
 

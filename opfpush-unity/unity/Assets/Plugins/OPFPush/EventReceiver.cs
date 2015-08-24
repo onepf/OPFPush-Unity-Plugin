@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System;
-using Newtonsoft.Json;
+using SimpleJSON;
 
 namespace OnePF.OPFPush
 {
@@ -19,7 +19,14 @@ namespace OnePF.OPFPush
 		{
 			Debug.Log ("OPFPush. Receive OnMessage event. json : " + messageJson);
 			if (OnMessageAction != null) {
-				var data = JsonConvert.DeserializeObject<OnMessageData> (messageJson);
+				var rawData = JSON.Parse (messageJson);			
+				var dataDictionary = new Dictionary<string, string> ();
+				foreach (var key in rawData["data"].AsObject.GetKeys ()) 
+				{
+					dataDictionary.Add (key.ToString(), rawData["data"][key.ToString()]);
+				}
+
+				var data = new OnMessageData (rawData["providerName"].Value, dataDictionary);
 				OnMessageAction (data.ProviderName, data.Data);
 			} else
 				Debug.Log ("OPFPush. OnMessageAction == null");
@@ -29,7 +36,8 @@ namespace OnePF.OPFPush
 		{
 			Debug.Log ("OPFPush. Receive OnDeletedMessages event. json : " + deletedMessagesJson);
 			if (OnDeletedMessageAction != null) {
-				var data = JsonConvert.DeserializeObject<OnDeletedMessagesData> (deletedMessagesJson);
+				var rawData = JSON.Parse (deletedMessagesJson);
+				var data = new OnDeletedMessagesData (rawData["providerName"].Value, rawData["messagesCount"].AsInt);
 				OnDeletedMessageAction (data.ProviderName, data.MessagesCount);
 			} else
 				Debug.Log ("OPFPush. OnDeletedMessageAction == null");
@@ -39,7 +47,8 @@ namespace OnePF.OPFPush
 		{
 			Debug.Log ("OPFPush. Receive OnRegistered event. json : " + registeredJson);
 			if (OnRegisteredAction != null) {
-				var data = JsonConvert.DeserializeObject<OnRegisteredData> (registeredJson);
+				var rawData = JSON.Parse (registeredJson);
+				var data = new OnRegisteredData (rawData["providerName"].Value, rawData["registrationId"].Value);
 				OnRegisteredAction (data.ProviderName, data.RegistrationId);
 			} else 
 				Debug.Log ("OPFPush. OnRegisteredAction == null");
@@ -49,7 +58,8 @@ namespace OnePF.OPFPush
 		{
 			Debug.Log ("OPFPush. Receive OnUnregistered event. json : " + unregisteredJson);
 			if (OnUnregisteredAction != null) {
-				var data = JsonConvert.DeserializeObject<OnUnregisteredData> (unregisteredJson);
+				var rawData = JSON.Parse (unregisteredJson);
+				var data = new OnUnregisteredData (rawData["providerName"].Value, rawData["oldRegistrationId"].Value);
 				OnUnregisteredAction (data.ProviderName, data.OldRegistrationId);
 			} else
 				Debug.Log ("OPFPush. OnUnregisteredAction == null");
@@ -59,8 +69,15 @@ namespace OnePF.OPFPush
 		{
 			Debug.Log ("OPFPush. Receive OnNoAvailableProvider event. json : " + noAvailableProviderJson);
 			if (OnNoAvailableProviderActon != null) {
-				var data = JsonConvert.DeserializeObject<OnNoAvailableProviderData> (noAvailableProviderJson);
-				OnNoAvailableProviderActon (data.PushErrors);
+				var rawData = JSON.Parse (noAvailableProviderJson);				
+				var dataDictionary = new Dictionary<string, PushError> ();
+				var rawPushErrorsArray = rawData["pushErrors"];
+				foreach (var key in rawPushErrorsArray.AsObject.GetKeys ()) 
+				{
+					var rawPushError = rawPushErrorsArray[key.ToString()];
+					dataDictionary.Add (key.ToString(), new PushError(rawPushError["availabilityErrorCode"].Value, rawPushError["type"].Value, rawPushError["originalError"].Value));
+				}
+				OnNoAvailableProviderActon (dataDictionary);
 			} else 
 				Debug.Log ("OPFPush. OnNoAvailableProviderActon == null");
 		}
